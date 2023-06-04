@@ -1,7 +1,7 @@
 // frontend\src\components\AdminRoute.jsx
 
 import { Navigate, Outlet } from 'react-router-dom';
-import useAuthStore from '../state/store'; // Import Zustand store
+import { useAuthStore } from '../state/store';  // Import Zustand store
 
 const AdminRoute = () => {
   const { userInfo } = useAuthStore(); // Use the userInfo from Zustand store

@@ -10,7 +10,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useProfileMutation } from '../slices/usersApiSlice';
 import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
-import useAuthStore from '../state/store'; // Import Zustand store
+import { useAuthStore } from '../state/store';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('');

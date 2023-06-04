@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import useAuthStore from '../state/store';
+import { useAuthStore } from '../state/store';
 import {
   Row,
   Col,

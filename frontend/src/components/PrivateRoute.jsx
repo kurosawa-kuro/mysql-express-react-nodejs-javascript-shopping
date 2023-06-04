@@ -1,7 +1,7 @@
 // frontend\src\components\PrivateRoute.jsx
 
 import { Navigate, Outlet } from 'react-router-dom';
-import useAuthStore from '../state/store'; // Import Zustand store
+import { useAuthStore } from '../state/store';
 
 const PrivateRoute = () => {
   const { userInfo } = useAuthStore(); // Use the userInfo from Zustand store

@@ -7,7 +7,7 @@ import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 
 import { useRegisterMutation } from '../slices/usersApiSlice';
-import useAuthStore from '../state/store'; // Import Zustand store
+import { useAuthStore } from '../state/store'; // Import Zustand store
 import { toast } from 'react-toastify';
 
 const RegisterScreen = () => {

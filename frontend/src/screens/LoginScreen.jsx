@@ -7,7 +7,7 @@ import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 
 import { useLoginMutation } from '../slices/usersApiSlice';
-import useAuthStore from '../state/store'; // Zustand store
+import { useAuthStore } from '../state/store';
 import { toast } from 'react-toastify';
 
 const LoginScreen = () => {

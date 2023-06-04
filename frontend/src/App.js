@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import useAuthStore from './state/store'; // Import Zustand store
+import { useAuthStore } from './state/store'; // Import Zustand store
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
