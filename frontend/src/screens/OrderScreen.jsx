@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
-import { useSelector } from 'react-redux';
+import useAuthStore from '../state/store';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -30,7 +30,7 @@ const OrderScreen = () => {
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useAuthStore();
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 

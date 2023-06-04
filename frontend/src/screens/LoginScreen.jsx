@@ -3,24 +3,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 
 import { useLoginMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import useAuthStore from '../state/store'; // Zustand store
 import { toast } from 'react-toastify';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  // Zustand hooks
+  const { userInfo, setCredentials } = useAuthStore();
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -36,7 +35,7 @@ const LoginScreen = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      setCredentials({ ...res });
       navigate(redirect);
     } catch (err) {
       toast.error(err?.data?.message || err.error);

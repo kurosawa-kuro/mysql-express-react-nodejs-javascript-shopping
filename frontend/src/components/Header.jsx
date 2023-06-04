@@ -3,18 +3,18 @@
 import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/usersApiSlice';
-import { logout } from '../slices/authSlice';
 import SearchBox from './SearchBox';
 import logo from '../assets/logo.png';
+import useAuthStore from '../state/store'; // import the Zustand store
 
 const Header = () => {
-  const { cartItems } = useSelector((state) => state.cart);
-  const { userInfo } = useSelector((state) => state.auth);
+  const cartItems = []; // Assuming cartItems state from somewhere else
 
-  const dispatch = useDispatch();
+  // Replace the useSelector calls with the Zustand hook
+  const { userInfo, logout } = useAuthStore();
+
   const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
@@ -22,7 +22,7 @@ const Header = () => {
   const logoutHandler = async () => {
     try {
       await logoutApiCall().unwrap();
-      dispatch(logout());
+      logout();
       navigate('/login');
     } catch (err) {
       console.error(err);

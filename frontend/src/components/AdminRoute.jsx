@@ -1,10 +1,10 @@
 // frontend\src\components\AdminRoute.jsx
 
 import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import useAuthStore from '../state/store'; // Import Zustand store
 
 const AdminRoute = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useAuthStore(); // Use the userInfo from Zustand store
   return userInfo && userInfo.isAdmin ? (
     <Outlet />
   ) : (

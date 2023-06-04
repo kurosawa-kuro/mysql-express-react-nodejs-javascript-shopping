@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 
 import { useRegisterMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import useAuthStore from '../state/store'; // Import Zustand store
 import { toast } from 'react-toastify';
 
 const RegisterScreen = () => {
@@ -17,12 +16,12 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [register, { isLoading }] = useRegisterMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  // Replace useSelector and dispatch calls with Zustand hook
+  const { userInfo, setCredentials } = useAuthStore();
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -42,7 +41,7 @@ const RegisterScreen = () => {
     } else {
       try {
         const res = await register({ name, email, password }).unwrap();
-        dispatch(setCredentials({ ...res }));
+        setCredentials({ ...res }); // Call setCredentials directly
         navigate(redirect);
       } catch (err) {
         toast.error(err?.data?.message || err.error);

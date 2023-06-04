@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import useAuthStore from '../state/store';
 import {
   Row,
   Col,
@@ -46,7 +47,7 @@ const ProductScreen = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useAuthStore();
 
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();

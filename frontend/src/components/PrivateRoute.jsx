@@ -1,10 +1,11 @@
 // frontend\src\components\PrivateRoute.jsx
 
 import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import useAuthStore from '../state/store'; // Import Zustand store
 
 const PrivateRoute = () => {
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useAuthStore(); // Use the userInfo from Zustand store
   return userInfo ? <Outlet /> : <Navigate to='/login' replace />;
 };
+
 export default PrivateRoute;
