@@ -1,33 +1,26 @@
 // frontend\src\screens\CartScreen.jsx
 
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  Row,
-  Col,
-  ListGroup,
-  Image,
-  Form,
-  Button,
-  Card,
-} from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
-import { addToCart, removeFromCart } from '../slices/cartSlice';
+import { useCartStore } from '../state/store';  // import the useCartStore
 
 const CartScreen = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart
+  } = useCartStore();  // get state and functions from useCartStore
 
   const addToCartHandler = async (product, qty) => {
-    dispatch(addToCart({ ...product, qty }));
+    addToCart({ ...product, qty });
   };
 
   const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id));
+    removeFromCart(id);
   };
 
   const checkoutHandler = () => {

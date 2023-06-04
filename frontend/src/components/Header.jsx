@@ -7,10 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import SearchBox from './SearchBox';
 import logo from '../assets/logo.png';
-import { useAuthStore } from '../state/store';
+import { useAuthStore, useCartStore } from '../state/store';
+
 
 const Header = () => {
-  const cartItems = []; // Assuming cartItems state from somewhere else
+  const {
+    cartItems,
+  } = useCartStore();
+  // const cartItems = []; // Assuming cartItems state from somewhere else
 
   // Replace the useSelector calls with the Zustand hook
   const { userInfo, logout } = useAuthStore();
