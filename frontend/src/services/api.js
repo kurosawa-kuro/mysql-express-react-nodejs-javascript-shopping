@@ -6,15 +6,18 @@ const apiClient = getApiClient();
 
 // Helper function to handle errors
 const handleApiError = (error) => {
-    if (error && error.response) {
+    if (error.response) {
         throw new Error(error.response.data.message);
+    } else if (error.request) {
+        throw new Error('Unable to connect to the server. Please try again.');
+    } else {
+        throw new Error('An error occurred. Please try again.');
     }
-    throw error;
-}
+};
 
 export const registerUserApi = async (user) => {
     try {
-        const response = await apiClient.post('/api/users', user);
+        const response = await apiClient.post('/api/users/register', user);
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -23,7 +26,7 @@ export const registerUserApi = async (user) => {
 
 export const loginUserApi = async (credentials) => {
     try {
-        const response = await apiClient.post('/api/users/auth', credentials);
+        const response = await apiClient.post('/api/users/login', credentials);
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -92,6 +95,77 @@ export const updateUserApi = async ({ userId, name, email, isAdmin }) => {
     }
 };
 
+export const getProductsApi = async ({ keyword, pageNumber }) => {
+    try {
+        const response = await apiClient.get('/api/products', { params: { keyword, pageNumber } });
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const getProductDetailsApi = async (productId) => {
+    try {
+        const response = await apiClient.get(`/api/products/${productId}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const createProductApi = async (product) => {
+    try {
+        const response = await apiClient.post('/api/products', product);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const updateProductApi = async ({ productId, ...productData }) => {
+    try {
+        const response = await apiClient.put(`/api/products/${productId}`, productData);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const uploadProductImageApi = async (imageData) => {
+    try {
+        const response = await apiClient.post('/api/upload', imageData);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const deleteProductApi = async (productId) => {
+    try {
+        const response = await apiClient.delete(`/api/products/${productId}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const createReviewApi = async ({ productId, ...reviewData }) => {
+    try {
+        const response = await apiClient.post(`/api/products/${productId}/reviews`, reviewData);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const getTopProductsApi = async () => {
+    try {
+        const response = await apiClient.get('/api/products/top');
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
 
 
 
