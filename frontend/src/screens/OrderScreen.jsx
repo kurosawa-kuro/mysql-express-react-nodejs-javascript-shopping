@@ -1,40 +1,32 @@
 // frontend\src\screens\OrderScreen.jsx
 
+// External Imports
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
-import { useAuthStore } from '../state/store';
 import { toast } from 'react-toastify';
+
+// Internal Imports
+import { useAuthStore } from '../state/store';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getOrderDetailsApi, payOrderApi, deliverOrderApi } from '../services/api';
 
 const OrderScreen = () => {
+  // useParams
   const { id: orderId } = useParams();
+
+  // useAuthStore
   const { userInfo } = useAuthStore();
 
+  // useState
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [loadingPay, setLoadingPay] = useState(false);
   const [loadingDeliver, setLoadingDeliver] = useState(false);
 
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        setLoading(true);
-        const data = await getOrderDetailsApi(orderId);
-        setOrder(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchOrder();
-  }, [orderId]);
-
+  // Handlers
   const onApproveTest = async () => {
     try {
       setLoadingPay(true);
@@ -62,6 +54,24 @@ const OrderScreen = () => {
     }
   };
 
+  // useEffect
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        setLoading(true);
+        const data = await getOrderDetailsApi(orderId);
+        setOrder(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [orderId]);
+
+  // Conditional Rendering
   if (loading || loadingPay || loadingDeliver) {
     return <Loader />;
   }
@@ -74,6 +84,7 @@ const OrderScreen = () => {
     return null; // or some empty state
   }
 
+  // Return JSX
   return (
     <>
       <h1>Order {order._id}</h1>
