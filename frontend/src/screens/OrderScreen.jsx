@@ -24,15 +24,26 @@ const OrderScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fetch Order
+  const fetchOrder = async () => {
+    try {
+      setLoading(true);
+      const data = await getOrderDetailsApi(orderId);
+      setOrder(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handlers
   const onApproveTest = async () => {
     try {
       setLoading(true);
       await payOrderApi({ orderId, details: { payer: {} } });
       toast.success('Order is paid');
-      const data = await getOrderDetailsApi(orderId); // Refetch
-      setOrder(data);
-      setLoading(false);
+      fetchOrder();
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -43,9 +54,7 @@ const OrderScreen = () => {
     try {
       setLoading(true);
       await deliverOrderApi(orderId);
-      const data = await getOrderDetailsApi(orderId); // Refetch
-      setOrder(data);
-      setLoading(false);
+      fetchOrder();
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -54,18 +63,6 @@ const OrderScreen = () => {
 
   // useEffect
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        setLoading(true);
-        const data = await getOrderDetailsApi(orderId);
-        setOrder(data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
     fetchOrder();
   }, [orderId]);
 
