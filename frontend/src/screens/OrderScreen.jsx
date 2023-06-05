@@ -1,51 +1,80 @@
 // frontend\src\screens\OrderScreen.jsx
 
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { useAuthStore } from '../state/store';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import {
-  useDeliverOrderMutation,
-  useGetOrderDetailsQuery,
-  usePayOrderMutation,
-} from '../slices/ordersApiSlice';
+import { getOrderDetailsApi, payOrderApi, deliverOrderApi } from '../services/api';
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
-
-  const {
-    data: order,
-    refetch,
-    isLoading,
-    error,
-  } = useGetOrderDetailsQuery(orderId);
-
-  const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
-
-  const [deliverOrder, { isLoading: loadingDeliver }] =
-    useDeliverOrderMutation();
-
   const { userInfo } = useAuthStore();
 
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
-    refetch();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [loadingPay, setLoadingPay] = useState(false);
+  const [loadingDeliver, setLoadingDeliver] = useState(false);
 
-    toast.success('Order is paid');
-  }
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        setLoading(true);
+        const data = await getOrderDetailsApi(orderId);
+        setOrder(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
 
-  const deliverHandler = async () => {
-    await deliverOrder(orderId);
-    refetch();
+    fetchOrder();
+  }, [orderId]);
+
+  const onApproveTest = async () => {
+    try {
+      setLoadingPay(true);
+      await payOrderApi({ orderId, details: { payer: {} } });
+      toast.success('Order is paid');
+      const data = await getOrderDetailsApi(orderId); // Refetch
+      setOrder(data);
+      setLoadingPay(false);
+    } catch (err) {
+      setError(err.message);
+      setLoadingPay(false);
+    }
   };
 
-  return isLoading ? (
-    <Loader />
-  ) : error ? (
-    <Message variant='danger'>{error}</Message>
-  ) : (
+  const deliverHandler = async () => {
+    try {
+      setLoadingDeliver(true);
+      await deliverOrderApi(orderId);
+      const data = await getOrderDetailsApi(orderId); // Refetch
+      setOrder(data);
+      setLoadingDeliver(false);
+    } catch (err) {
+      setError(err.message);
+      setLoadingDeliver(false);
+    }
+  };
+
+  if (loading || loadingPay || loadingDeliver) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <Message variant='danger'>{error}</Message>;
+  }
+
+  if (!order) {
+    return null; // or some empty state
+  }
+
+  return (
     <>
       <h1>Order {order._id}</h1>
       <Row>
@@ -154,24 +183,18 @@ const OrderScreen = () => {
               {!order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
-
-                  {loadingPay ? (
-                    <Loader />
+                  {!userInfo ? (
+                    <Message>
+                      Please <Link to='/login'>sign in</Link> to pay
+                    </Message>
                   ) : (
-                    <div>
-                      <Button
-                        style={{ marginBottom: '10px' }}
-                        onClick={onApproveTest}
-                      >
-                        Test Pay Order
-                      </Button>
-                    </div>
+                    <Button onClick={onApproveTest} className='btn-block' type='button' disabled={order.orderItems.length === 0}>
+                      Test Pay
+                    </Button>
                   )}
                 </ListGroup.Item>
               )}
-
               {loadingDeliver && <Loader />}
-
               {userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
