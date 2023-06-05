@@ -1,5 +1,3 @@
-// frontend\src\screens\ProfileScreen.jsx
-
 import React, { useEffect, useState } from 'react';
 import { Table, Form, Button, Row, Col } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -8,7 +6,7 @@ import { FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useProfileMutation } from '../slices/usersApiSlice';
+import { updateUserProfileApi } from '../services/api';  // Import the api function
 import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
 import { useAuthStore } from '../state/store';
 
@@ -17,14 +15,12 @@ const ProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Replace useSelector call with Zustand hook
   const { userInfo, setCredentials } = useAuthStore();
 
-  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
-
-  const [updateProfile, { isLoading: loadingUpdateProfile }] =
-    useProfileMutation();
+  const { data: orders, isLoading: loadingOrders, error } = useGetMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
@@ -38,17 +34,20 @@ const ProfileScreen = () => {
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
     } else {
+      setIsLoading(true);
       try {
-        const res = await updateProfile({
+        const res = await updateUserProfileApi({
           _id: userInfo._id,
           name,
           email,
           password,
-        }).unwrap();
+        });
         setCredentials({ ...res }); // Call setCredentials directly
         toast.success('Profile updated successfully');
       } catch (err) {
-        toast.error(err?.data?.message || err.message);
+        toast.error(err.message);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -102,12 +101,12 @@ const ProfileScreen = () => {
           <Button type='submit' variant='primary'>
             Update
           </Button>
-          {loadingUpdateProfile && <Loader />}
+          {isLoading && <Loader />}
         </Form>
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
-        {isLoading ? (
+        {loadingOrders ? (
           <Loader />
         ) : error ? (
           <Message variant='danger'>
@@ -128,7 +127,7 @@ const ProfileScreen = () => {
             <tbody>
               {orders.map((order) => (
                 <tr key={order._id}>
-                  <tD>{order._id}</tD>
+                  <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>
                   <td>{order.totalPrice}</td>
                   <td>

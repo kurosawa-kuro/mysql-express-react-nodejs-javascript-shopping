@@ -1,29 +1,44 @@
 // frontend\src\screens\admin\UserListScreen.jsx
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
 import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
-import Message from '../../components/Message';
+// import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import {
-  useDeleteUserMutation,
-  useGetUsersQuery,
-} from '../../slices/usersApiSlice';
 import { toast } from 'react-toastify';
+import { useAuthStore } from '../../state/store';  // Zustand store hook
+import { deleteUserApi, getUsersApi } from '../../services/api';  // Import the api functions
 
 const UserListScreen = () => {
-  const { data: users, refetch, isLoading, error } = useGetUsersQuery();
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { userInfo } = useAuthStore();  // Zustand store hook
 
-  const [deleteUser] = useDeleteUserMutation();
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getUsersApi();
+        setUsers(data);
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure')) {
       try {
-        await deleteUser(id);
-        refetch();
+        await deleteUserApi(id);
+        setUsers(users.filter((user) => user._id !== id));
+        toast.success('User deleted successfully');
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err.message);
       }
     }
   };
@@ -33,10 +48,6 @@ const UserListScreen = () => {
       <h1>Users</h1>
       {isLoading ? (
         <Loader />
-      ) : error ? (
-        <Message variant='danger'>
-          {error?.data?.message || error.error}
-        </Message>
       ) : (
         <Table striped bordered hover responsive className='table-sm'>
           <thead>
@@ -64,7 +75,7 @@ const UserListScreen = () => {
                   )}
                 </td>
                 <td>
-                  {!user.isAdmin && (
+                  {userInfo.isAdmin && (
                     <>
                       <LinkContainer
                         to={`/admin/user/${user._id}/edit`}

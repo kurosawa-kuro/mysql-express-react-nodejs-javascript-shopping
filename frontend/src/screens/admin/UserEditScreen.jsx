@@ -1,54 +1,54 @@
 // frontend\src\screens\admin\UserEditScreen.jsx
 
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
-import Message from '../../components/Message';
+// import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import FormContainer from '../../components/FormContainer';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
-import {
-  useGetUserDetailsQuery,
-  useUpdateUserMutation,
-} from '../../slices/usersApiSlice';
+import { getUserDetailsApi, updateUserApi } from '../../services/api';  // Import the api functions
 
 const UserEditScreen = () => {
   const { id: userId } = useParams();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-
-  const {
-    data: user,
-    isLoading,
-    error,
-    refetch,
-  } = useGetUserDetailsQuery(userId);
-
-  const [updateUser, { isLoading: loadingUpdate }] = useUpdateUserMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      setIsLoading(true);
+      try {
+        const user = await getUserDetailsApi(userId);
+        setName(user.name);
+        setEmail(user.email);
+        setIsAdmin(user.isAdmin);
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
+
   const submitHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      await updateUser({ userId, name, email, isAdmin });
-      toast.success('user updated successfully');
-      refetch();
+      await updateUserApi({ userId, name, email, isAdmin });
+      toast.success('User updated successfully');
       navigate('/admin/userlist');
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (user) {
-      setName(user.name);
-      setEmail(user.email);
-      setIsAdmin(user.isAdmin);
-    }
-  }, [user]);
 
   return (
     <>
@@ -57,13 +57,8 @@ const UserEditScreen = () => {
       </Link>
       <FormContainer>
         <h1>Edit User</h1>
-        {loadingUpdate && <Loader />}
         {isLoading ? (
           <Loader />
-        ) : error ? (
-          <Message variant='danger'>
-            {error?.data?.message || error.error}
-          </Message>
         ) : (
           <Form onSubmit={submitHandler}>
             <Form.Group className='my-2' controlId='name'>

@@ -56,3 +56,44 @@ export const logoutUserApi = async () => {
         handleApiError(error);
     }
 };
+
+export const getUsersApi = async () => {
+    try {
+        const response = await apiClient.get('/api/users');
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const deleteUserApi = async (id) => {
+    try {
+        const response = await apiClient.delete(`/api/users/${id}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+export const getUserDetailsApi = async (userId) => {
+    try {
+        const response = await apiClient.get(`/api/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+export const updateUserApi = async ({ userId, name, email, isAdmin }) => {
+    try {
+        const response = await apiClient.put(`/api/users/${userId}`, { name, email, isAdmin });
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+
+
+
+
+
