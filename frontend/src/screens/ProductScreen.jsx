@@ -1,9 +1,8 @@
 // frontend\src\screens\ProductScreen.jsx
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useAuthStore } from '../state/store';
 import {
   Row,
@@ -15,58 +14,63 @@ import {
   Form,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import {
-  useGetProductDetailsQuery,
-  useCreateReviewMutation,
-} from '../slices/productsApiSlice';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Meta from '../components/Meta';
 import { useCartStore } from '../state/store';
+import { getProductDetailsApi, createReviewApi } from '../services/api';
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
 
   const { addToCart } = useCartStore();
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+
+  const fetchProductDetails = useCallback(async () => {
+    try {
+      setLoading(true);
+      const product = await getProductDetailsApi(productId);
+      setProduct(product);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+      setLoading(false);
+    }
+  }, [productId]);
+
+  useEffect(() => {
+    fetchProductDetails();
+  }, [fetchProductDetails]);
 
   const addToCartHandler = () => {
     addToCart({ ...product, qty });
     navigate('/cart');
   };
 
-  const {
-    data: product,
-    isLoading,
-    refetch,
-    error,
-  } = useGetProductDetailsQuery(productId);
-
   const { userInfo } = useAuthStore();
-
-  const [createReview, { isLoading: loadingProductReview }] =
-    useCreateReviewMutation();
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     try {
-      await createReview({
+      await createReviewApi({
         productId,
         rating,
         comment,
-      }).unwrap();
-      refetch();
+      });
+      fetchProductDetails();
       toast.success('Review created successfully');
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.message);
     }
   };
 
@@ -75,13 +79,13 @@ const ProductScreen = () => {
       <Link className='btn btn-light my-3' to='/'>
         Go Back
       </Link>
-      {isLoading ? (
+      {loading ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>
           {error?.data?.message || error.error}
         </Message>
-      ) : (
+      ) : product ? (
         <>
           <Meta title={product.name} description={product.description} />
           <Row>
@@ -179,7 +183,7 @@ const ProductScreen = () => {
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
 
-                  {loadingProductReview && <Loader />}
+                  {loading && <Loader />}
 
                   {userInfo ? (
                     <Form onSubmit={submitHandler}>
@@ -210,7 +214,7 @@ const ProductScreen = () => {
                         ></Form.Control>
                       </Form.Group>
                       <Button
-                        disabled={loadingProductReview}
+                        disabled={loading}
                         type='submit'
                         variant='primary'
                       >
@@ -227,7 +231,8 @@ const ProductScreen = () => {
             </Col>
           </Row>
         </>
-      )}
+
+      ) : null}
     </>
   );
 };

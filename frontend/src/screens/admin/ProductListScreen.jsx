@@ -7,44 +7,52 @@ import { useParams } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
-import {
-  useGetProductsQuery,
-  useDeleteProductMutation,
-  useCreateProductMutation,
-} from '../../slices/productsApiSlice';
 import { toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
+import { getProductsApi, deleteProductApi, createProductApi } from '../../services/api';
 
 const ProductListScreen = () => {
   const { pageNumber } = useParams();
+  const [productsData, setProductsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const { data, isLoading, error, refetch } = useGetProductsQuery({
-    pageNumber,
-  });
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const data = await getProductsApi({ pageNumber });
+        setProductsData(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
 
-  const [deleteProduct, { isLoading: loadingDelete }] =
-    useDeleteProductMutation();
+    fetchProducts();
+  }, [pageNumber]);
 
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure')) {
       try {
-        await deleteProduct(id);
-        refetch();
+        await deleteProductApi(id);
+        const newProductsData = await getProductsApi({ pageNumber });
+        setProductsData(newProductsData);
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err.message);
       }
     }
   };
 
-  const [createProduct, { isLoading: loadingCreate }] =
-    useCreateProductMutation();
-
   const createProductHandler = async () => {
     if (window.confirm('Are you sure you want to create a new product?')) {
       try {
-        await createProduct();
-        refetch();
+        await createProductApi();
+        const newProductsData = await getProductsApi({ pageNumber });
+        setProductsData(newProductsData);
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err.message);
       }
     }
   };
@@ -62,9 +70,7 @@ const ProductListScreen = () => {
         </Col>
       </Row>
 
-      {loadingCreate && <Loader />}
-      {loadingDelete && <Loader />}
-      {isLoading ? (
+      {loading ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>{error}</Message>
@@ -82,7 +88,7 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {data.products.map((product) => (
+              {productsData && productsData.products.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
@@ -107,7 +113,9 @@ const ProductListScreen = () => {
               ))}
             </tbody>
           </Table>
-          <Paginate pages={data.pages} page={data.page} isAdmin={true} />
+          {productsData &&
+            <Paginate pages={productsData.pages} page={productsData.page} isAdmin={true} />
+          }
         </>
       )}
     </>
@@ -115,3 +123,4 @@ const ProductListScreen = () => {
 };
 
 export default ProductListScreen;
+
