@@ -1,29 +1,27 @@
 // frontend\src\screens\LoginScreen.jsx
 
+// External Imports
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+
+// Internal Imports
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-
-import { useLoginMutation } from '../slices/usersApiSlice';
-import { useAuthStore } from '../state/store';
-import { toast } from 'react-toastify';
+import { loginUserApi } from '../services/api';  // Import the api function
+import { useAuthStore } from '../state/store';  // Zustand store hook
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);  // useState to handle loading state
 
   const navigate = useNavigate();
-
-  const [login, { isLoading }] = useLoginMutation();
-
-  // Zustand hooks
-  const { userInfo, setCredentials } = useAuthStore();
-
   const { search } = useLocation();
-  const sp = new URLSearchParams(search);
-  const redirect = sp.get('redirect') || '/';
+  const searchParams = new URLSearchParams(search);
+  const redirect = searchParams.get('redirect') || '/';
+  const { userInfo, setCredentials } = useAuthStore();
 
   useEffect(() => {
     if (userInfo) {
@@ -33,12 +31,15 @@ const LoginScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);  // Set loading state
     try {
-      const res = await login({ email, password }).unwrap();
+      const res = await loginUserApi({ email, password });
       setCredentials({ ...res });
       navigate(redirect);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);  // Reset loading state
     }
   };
 
