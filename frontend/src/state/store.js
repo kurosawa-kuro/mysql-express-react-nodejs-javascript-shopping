@@ -26,7 +26,9 @@ const initialState = localStorage.getItem('cart')
     : { cartItems: [], shippingAddress: {}, paymentMethod: 'PayPal' };
 
 const useCartStore = create((set) => ({
-    ...initialState,
+    cartInfo: localStorage.getItem('cart')
+        ? JSON.parse(localStorage.getItem('cart'))
+        : { cartItems: [], shippingAddress: {}, paymentMethod: 'PayPal' },
     addToCart: (item) => set((state) => {
         const existItem = state.cartItems.find((x) => x._id === item._id);
         if (existItem) {

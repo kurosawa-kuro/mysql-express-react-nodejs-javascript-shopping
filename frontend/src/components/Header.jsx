@@ -10,7 +10,10 @@ import { useAuthStore, useCartStore } from '../state/store';
 import { logoutUserApi } from '../services/api';  // Import the api function
 
 const Header = () => {
-  const { cartItems } = useCartStore();
+  console.log('Header');
+
+  const { cartInfo } = useCartStore();
+  console.log('Header useCartStore() cartInfo', cartInfo);
   const { userInfo, logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -41,9 +44,9 @@ const Header = () => {
               <LinkContainer to='/cart'>
                 <Nav.Link>
                   <FaShoppingCart /> Cart
-                  {cartItems.length > 0 && (
+                  {cartInfo.cartItems.length > 0 && (
                     <Badge pill bg='success' style={{ marginLeft: '5px' }}>
-                      {cartItems.reduce((a, c) => a + c.qty, 0)}
+                      {cartInfo.cartItems.reduce((a, c) => a + c.qty, 0)}
                     </Badge>
                   )}
                 </Nav.Link>
