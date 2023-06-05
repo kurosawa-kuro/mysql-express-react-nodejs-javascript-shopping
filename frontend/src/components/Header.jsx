@@ -4,28 +4,19 @@ import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
 import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../slices/usersApiSlice';
 import SearchBox from './SearchBox';
 import logo from '../assets/logo.png';
 import { useAuthStore, useCartStore } from '../state/store';
-
+import { logoutUserApi } from '../services/api';  // Import the api function
 
 const Header = () => {
-  const {
-    cartItems,
-  } = useCartStore();
-  // const cartItems = []; // Assuming cartItems state from somewhere else
-
-  // Replace the useSelector calls with the Zustand hook
+  const { cartItems } = useCartStore();
   const { userInfo, logout } = useAuthStore();
-
   const navigate = useNavigate();
-
-  const [logoutApiCall] = useLogoutMutation();
 
   const logoutHandler = async () => {
     try {
-      await logoutApiCall().unwrap();
+      await logoutUserApi();
       logout();
       navigate('/login');
     } catch (err) {
