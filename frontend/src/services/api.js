@@ -14,7 +14,7 @@ const handleApiError = (error) => {
 
 export const registerUserApi = async (user) => {
     try {
-        const response = await apiClient.post('/api/users/register', user);
+        const response = await apiClient.post('/api/users', user);
         return response.data;
     } catch (error) {
         handleApiError(error);

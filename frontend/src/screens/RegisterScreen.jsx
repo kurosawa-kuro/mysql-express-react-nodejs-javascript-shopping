@@ -1,31 +1,29 @@
 // frontend\src\screens\RegisterScreen.jsx
 
+// External Imports
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+
+// Internal Imports
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-
-import { useRegisterMutation } from '../slices/usersApiSlice';
-import { useAuthStore } from '../state/store'; // Import Zustand store
-import { toast } from 'react-toastify';
+import { registerUserApi } from '../services/api';  // Import the api function
+import { useAuthStore } from '../state/store';  // Zustand store hook
 
 const RegisterScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);  // useState to handle loading state
 
   const navigate = useNavigate();
-
-  const [register, { isLoading }] = useRegisterMutation();
-
-  // Replace useSelector and dispatch calls with Zustand hook
-  const { userInfo, setCredentials } = useAuthStore();
-
   const { search } = useLocation();
-  const sp = new URLSearchParams(search);
-  const redirect = sp.get('redirect') || '/';
+  const searchParams = new URLSearchParams(search);
+  const redirect = searchParams.get('redirect') || '/';
+  const { userInfo, setCredentials } = useAuthStore();
 
   useEffect(() => {
     if (userInfo) {
@@ -35,16 +33,18 @@ const RegisterScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
     } else {
+      setIsLoading(true);  // Set loading state
       try {
-        const res = await register({ name, email, password }).unwrap();
-        setCredentials({ ...res }); // Call setCredentials directly
+        const res = await registerUserApi({ name, email, password });
+        setCredentials({ ...res });
         navigate(redirect);
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err.message);
+      } finally {
+        setIsLoading(false);  // Reset loading state
       }
     }
   };
@@ -52,6 +52,7 @@ const RegisterScreen = () => {
   return (
     <FormContainer>
       <h1>Register</h1>
+
       <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='name'>
           <Form.Label>Name</Form.Label>
@@ -82,6 +83,7 @@ const RegisterScreen = () => {
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
+
         <Form.Group className='my-2' controlId='confirmPassword'>
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
