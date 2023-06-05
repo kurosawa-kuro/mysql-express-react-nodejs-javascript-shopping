@@ -167,7 +167,65 @@ export const getTopProductsApi = async () => {
     }
 };
 
+export const createOrderApi = async (order) => {
+    try {
+        const response = await apiClient.post('/api/orders', order);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
 
+export const getOrderDetailsApi = async (id) => {
+    try {
+        const response = await apiClient.get(`${'/api/orders'}/${id}`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
 
+export const payOrderApi = async ({ orderId, details }) => {
+    try {
+        const response = await apiClient.put(`${'/api/orders'}/${orderId}/pay`, details);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
 
+export const getPaypalClientIdApi = async () => {
+    try {
+        const response = await apiClient.get('/api/config/paypal');
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
 
+export const getMyOrdersApi = async () => {
+    try {
+        const response = await apiClient.get(`${'/api/orders'}/mine`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export const getOrdersApi = async () => {
+    try {
+        const response = await apiClient.get('/api/orders');
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+export const deliverOrderApi = async (orderId) => {
+    try {
+        const response = await apiClient.put(`${'/api/orders'}/${orderId}/deliver`);
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
