@@ -1,23 +1,41 @@
 // frontend\src\screens\admin\OrderListScreen.jsx
 
+import React, { useState, useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import { useGetOrdersQuery } from '../../slices/ordersApiSlice';
+import { getOrdersApi } from '../../services/api';
 
 const OrderListScreen = () => {
-  const { data: orders, isLoading, error } = useGetOrdersQuery();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const data = await getOrdersApi();
+        setOrders(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <>
       <h1>Orders</h1>
-      {isLoading ? (
+      {loading ? (
         <Loader />
       ) : error ? (
         <Message variant='danger'>
-          {error?.data?.message || error.error}
+          {error}
         </Message>
       ) : (
         <Table striped bordered hover responsive className='table-sm'>
@@ -69,4 +87,4 @@ const OrderListScreen = () => {
   );
 };
 
-export default OrderListScreen;
+export default OrderListScreen
