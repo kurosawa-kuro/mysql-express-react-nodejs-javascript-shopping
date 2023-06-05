@@ -42,34 +42,12 @@ const useCartStore = create((set) => ({
             newCartItems = [...state.cartItems, item];
         }
 
-        // Calculate the items price
-
-        const itemsPrice =
-            newCartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
-
-        // Calculate the shipping price
-        const shippingPrice = itemsPrice > 100 ? 0 : 10;
-
-        // Calculate the tax price
-        const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
-
-        // Calculate the total price
-        const totalPrice = (
-            Number(itemsPrice) +
-            Number(shippingPrice) +
-            Number(taxPrice)
-        ).toFixed(2);
-
         // Save the cart to localStorage
         localStorage.setItem('cartItems', JSON.stringify(newCartItems));
 
         return {
             ...state,
-            cartItems: newCartItems,
-            itemsPrice,
-            shippingPrice,
-            taxPrice,
-            totalPrice,
+            cartItems: newCartItems
         };
     }),
     removeFromCart: (id) => set((state) => {

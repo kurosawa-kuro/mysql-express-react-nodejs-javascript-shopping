@@ -1,31 +1,37 @@
 // frontend\src\screens\PlaceOrderScreen.jsx
-
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { useCreateOrderMutation } from '../slices/ordersApiSlice';
-import { useCartStore } from '../state/store'; // import useCartStore and useAuthStore
+import { createOrderApi } from '../services/api';  // Import the createOrderApi
+import { useCartStore } from '../state/store'; // import useCartStore
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
 
-  // get state and actions from useCartStore and useAuthStore
+  console.log("useCartStore", useCartStore());
+  // get state and actions from useCartStore
   const {
     cartItems,
     shippingAddress,
     paymentMethod,
-    itemsPrice,
-    shippingPrice,
-    taxPrice,
-    totalPrice,
     clearCartItems
   } = useCartStore();
 
-  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+  const itemsPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+  const shippingPrice = itemsPrice > 100 ? 0 : 10;
+  const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
+  const totalPrice = (
+    Number(itemsPrice) +
+    Number(shippingPrice) +
+    Number(taxPrice)
+  ).toFixed(2);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!shippingAddress.address) {
@@ -37,7 +43,8 @@ const PlaceOrderScreen = () => {
 
   const placeOrderHandler = async () => {
     try {
-      const res = await createOrder({
+      setLoading(true);
+      const res = await createOrderApi({
         orderItems: cartItems,
         shippingAddress: shippingAddress,
         paymentMethod: paymentMethod,
@@ -45,11 +52,14 @@ const PlaceOrderScreen = () => {
         shippingPrice: shippingPrice,
         taxPrice: taxPrice,
         totalPrice: totalPrice,
-      }).unwrap();
+      });
       clearCartItems(); // use the action from useCartStore
+      setLoading(false);
       navigate(`/order/${res._id}`);
     } catch (err) {
-      toast.error(err);
+      setLoading(false);
+      setError(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -117,7 +127,7 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${itemsPrice}</Col>
+                  <Col>${cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
@@ -150,7 +160,7 @@ const PlaceOrderScreen = () => {
                 >
                   Place Order
                 </Button>
-                {isLoading && <Loader />}
+                {loading && <Loader />}
               </ListGroup.Item>
             </ListGroup>
           </Card>
