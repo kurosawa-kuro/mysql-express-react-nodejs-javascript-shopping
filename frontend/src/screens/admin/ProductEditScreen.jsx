@@ -13,7 +13,6 @@ import {
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
-  console.log({ productId });
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
@@ -23,7 +22,6 @@ const ProductEditScreen = () => {
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
 
-  const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -33,7 +31,6 @@ const ProductEditScreen = () => {
       try {
         setLoading(true);
         const data = await getProductDetailsApi(productId);
-        setProduct(data);
         setName(data.name);
         setPrice(data.price);
         setImage(data.image);
