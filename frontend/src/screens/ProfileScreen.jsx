@@ -6,8 +6,7 @@ import { FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { updateUserProfileApi } from '../services/api';  // Import the api function
-import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
+import { updateUserProfileApi, getMyOrdersApi } from '../services/api';  // Import the api functions
 import { useAuthStore } from '../state/store';
 
 const ProfileScreen = () => {
@@ -16,17 +15,32 @@ const ProfileScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [error, setError] = useState(null);
 
   // Replace useSelector call with Zustand hook
   const { userInfo, setCredentials } = useAuthStore();
-
-  const { data: orders, isLoading: loadingOrders, error } = useGetMyOrdersQuery();
 
   useEffect(() => {
     if (userInfo) {
       setName(userInfo.name);
       setEmail(userInfo.email);
     }
+
+    const fetchOrders = async () => {
+      setLoadingOrders(true);
+      try {
+        const data = await getMyOrdersApi();
+        setOrders(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoadingOrders(false);
+      }
+    };
+
+    fetchOrders();
   }, [userInfo]);
 
   const submitHandler = async (e) => {
