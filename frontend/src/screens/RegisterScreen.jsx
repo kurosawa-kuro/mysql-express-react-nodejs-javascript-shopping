@@ -1,5 +1,3 @@
-// frontend\src\screens\RegisterScreen.jsx
-
 // External Imports
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -13,30 +11,34 @@ import { registerUserApi } from '../services/api';  // Import the api function
 import { useAuthStore } from '../state/store';  // Zustand store hook
 
 const RegisterScreen = () => {
+  // States
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);  // useState to handle loading state
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Hooks
   const navigate = useNavigate();
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const redirect = searchParams.get('redirect') || '/';
   const { userInfo, setCredentials } = useAuthStore();
 
+  // Effects
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [navigate, redirect, userInfo]);
 
+  // Event Handlers
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
     } else {
-      setIsLoading(true);  // Set loading state
+      setIsLoading(true);
       try {
         const res = await registerUserApi({ name, email, password });
         setCredentials({ ...res });
@@ -44,11 +46,12 @@ const RegisterScreen = () => {
       } catch (err) {
         toast.error(err.message);
       } finally {
-        setIsLoading(false);  // Reset loading state
+        setIsLoading(false);
       }
     }
   };
 
+  // Component Rendering
   return (
     <FormContainer>
       <h1>Register</h1>

@@ -1,5 +1,3 @@
-// frontend\src\screens\LoginScreen.jsx
-
 // External Imports
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -12,23 +10,28 @@ import FormContainer from '../components/FormContainer';
 import { loginUserApi } from '../services/api';  // Import the api function
 import { useAuthStore } from '../state/store';  // Zustand store hook
 
+// Component Definition
 const LoginScreen = () => {
+  // State Variables
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);  // useState to handle loading state
 
+  // Hooks
   const navigate = useNavigate();
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const redirect = searchParams.get('redirect') || '/';
   const { userInfo, setCredentials } = useAuthStore();
 
+  // Effect
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
     }
   }, [navigate, redirect, userInfo]);
 
+  // Handler Functions
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);  // Set loading state
@@ -43,6 +46,7 @@ const LoginScreen = () => {
     }
   };
 
+  // Component Render
   return (
     <FormContainer>
       <h1>Sign In</h1>
