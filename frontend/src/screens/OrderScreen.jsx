@@ -23,34 +23,32 @@ const OrderScreen = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [loadingPay, setLoadingPay] = useState(false);
-  const [loadingDeliver, setLoadingDeliver] = useState(false);
 
   // Handlers
   const onApproveTest = async () => {
     try {
-      setLoadingPay(true);
+      setLoading(true);
       await payOrderApi({ orderId, details: { payer: {} } });
       toast.success('Order is paid');
       const data = await getOrderDetailsApi(orderId); // Refetch
       setOrder(data);
-      setLoadingPay(false);
+      setLoading(false);
     } catch (err) {
       setError(err.message);
-      setLoadingPay(false);
+      setLoading(false);
     }
   };
 
   const deliverHandler = async () => {
     try {
-      setLoadingDeliver(true);
+      setLoading(true);
       await deliverOrderApi(orderId);
       const data = await getOrderDetailsApi(orderId); // Refetch
       setOrder(data);
-      setLoadingDeliver(false);
+      setLoading(false);
     } catch (err) {
       setError(err.message);
-      setLoadingDeliver(false);
+      setLoading(false);
     }
   };
 
@@ -72,7 +70,7 @@ const OrderScreen = () => {
   }, [orderId]);
 
   // Conditional Rendering
-  if (loading || loadingPay || loadingDeliver) {
+  if (loading) {
     return <Loader />;
   }
 
@@ -193,7 +191,7 @@ const OrderScreen = () => {
               </ListGroup.Item>
               {!order.isPaid && (
                 <ListGroup.Item>
-                  {loadingPay && <Loader />}
+                  {loading && <Loader />}
                   {!userInfo ? (
                     <Message>
                       Please <Link to='/login'>sign in</Link> to pay
@@ -205,7 +203,7 @@ const OrderScreen = () => {
                   )}
                 </ListGroup.Item>
               )}
-              {loadingDeliver && <Loader />}
+              {loading && <Loader />}
               {userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
