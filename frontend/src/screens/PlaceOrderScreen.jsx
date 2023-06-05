@@ -12,7 +12,6 @@ import { useCartStore } from '../state/store'; // import useCartStore
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
 
-  console.log("useCartStore", useCartStore());
   // get state and actions from useCartStore
   const {
     cartItems,

@@ -1,6 +1,5 @@
 // frontend\src\state\store.js
 import { create } from 'zustand';
-import { updateCart } from '../utils/cartUtils';
 
 const useAuthStore = create((set) => ({
     userInfo: localStorage.getItem('userInfo')
@@ -31,55 +30,64 @@ const useCartStore = create((set) => ({
     paymentMethod: localStorage.getItem('paymentMethod')
         ? JSON.parse(localStorage.getItem('paymentMethod'))
         : 'PayPal',
-    addToCart: (item) => set((state) => {
-        const existItem = state.cartItems.find((x) => x._id === item._id);
-        let newCartItems;
-        if (existItem) {
-            newCartItems = state.cartItems.map((x) =>
-                x._id === existItem._id ? item : x
-            );
-        } else {
-            newCartItems = [...state.cartItems, item];
-        }
+    addToCart: (item) => {
+        set((state) => {
+            const existItem = state.cartItems.find((x) => x._id === item._id);
+            let newCartItems;
+            if (existItem) {
+                newCartItems = state.cartItems.map((x) =>
+                    x._id === existItem._id ? item : x
+                );
+            } else {
+                newCartItems = [...state.cartItems, item];
+            }
 
-        // Save the cart to localStorage
-        localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+            // Save the cart to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(newCartItems));
 
-        return {
-            ...state,
-            cartItems: newCartItems
-        };
-    }),
-    removeFromCart: (id) => set((state) => {
-        const newCartItems = state.cartItems.filter((x) => x._id !== id);
-        localStorage.setItem('cartItems', JSON.stringify(newCartItems));
-        return {
-            ...state,
-            cartItems: newCartItems,
-        };
-    }),
-    saveShippingAddress: (address) => set((state) => {
-        console.log('address', address);
-        localStorage.setItem('shippingAddress', JSON.stringify(address));
-        return {
-            ...state,
-            shippingAddress: address,
-        };
-    }),
-    savePaymentMethod: (method) => set((state) => {
-        localStorage.setItem('paymentMethod', JSON.stringify(method));
-        return {
-            ...state,
-            paymentMethod: method,
-        };
-    }),
-    clearCartItems: () => set((state) => {
-        localStorage.setItem('cartItems', JSON.stringify([]));
-        return {
-            ...state,
-            cartItems: [],
-        };
-    }),
+            return {
+                ...state,
+                cartItems: newCartItems
+            };
+        });
+    },
+    removeFromCart: (id) => {
+        set((state) => {
+            const newCartItems = state.cartItems.filter((x) => x._id !== id);
+            localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+            return {
+                ...state,
+                cartItems: newCartItems,
+            };
+        });
+    },
+    saveShippingAddress: (address) => {
+        set((state) => {
+            localStorage.setItem('shippingAddress', JSON.stringify(address));
+            return {
+                ...state,
+                shippingAddress: address,
+            };
+        });
+    },
+    savePaymentMethod: (method) => {
+        set((state) => {
+            localStorage.setItem('paymentMethod', JSON.stringify(method));
+            return {
+                ...state,
+                paymentMethod: method,
+            };
+        });
+    },
+    clearCartItems: () => {
+        set((state) => {
+            localStorage.setItem('cartItems', JSON.stringify([]));
+            return {
+                ...state,
+                cartItems: [],
+            };
+        });
+    },
 }));
 
 export { useAuthStore, useCartStore };
