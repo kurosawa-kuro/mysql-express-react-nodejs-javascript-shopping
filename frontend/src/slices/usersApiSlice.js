@@ -19,19 +19,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
     //     body: data,
     //   }),
     // }),
-    logout: builder.mutation({
-      query: () => ({
-        url: `${USERS_URL}/logout`,
-        method: 'POST',
-      }),
-    }),
-    profile: builder.mutation({
-      query: (data) => ({
-        url: `${USERS_URL}/profile`,
-        method: 'PUT',
-        body: data,
-      }),
-    }),
+    // logout: builder.mutation({
+    //   query: () => ({
+    //     url: `${USERS_URL}/logout`,
+    //     method: 'POST',
+    //   }),
+    // }),
+    // profile: builder.mutation({
+    //   query: (data) => ({
+    //     url: `${USERS_URL}/profile`,
+    //     method: 'PUT',
+    //     body: data,
+    //   }),
+    // }),
     getUsers: builder.query({
       query: () => ({
         url: USERS_URL,

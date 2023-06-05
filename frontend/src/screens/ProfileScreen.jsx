@@ -27,9 +27,11 @@ const ProfileScreen = () => {
     useProfileMutation();
 
   useEffect(() => {
-    setName(userInfo.name);
-    setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.name]);
+    if (userInfo) {
+      setName(userInfo.name);
+      setEmail(userInfo.email);
+    }
+  }, [userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -46,7 +48,7 @@ const ProfileScreen = () => {
         setCredentials({ ...res }); // Call setCredentials directly
         toast.success('Profile updated successfully');
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err?.data?.message || err.message);
       }
     }
   };
