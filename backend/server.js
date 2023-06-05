@@ -6,6 +6,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 dotenv.config();
+import { PrismaClient } from "@prisma/client";
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -17,6 +18,15 @@ const port = process.env.PORT || 5000;
 
 connectDB();
 
+const prisma = new PrismaClient()
+
+try {
+  await prisma.$connect()
+  console.log('DB connected by Prisma')
+} catch (error) {
+  console.error(`Error: ${error.message}`)
+  process.exit(1)
+}
 const app = express();
 
 app.use(express.json());

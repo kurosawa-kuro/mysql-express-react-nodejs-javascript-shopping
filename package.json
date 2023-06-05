@@ -16,6 +16,7 @@
   "author": "Brad Traversy",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^4.15.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
@@ -25,7 +26,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.1",
     "multer": "^1.4.5-lts.1",
-    "zustand": "^4.3.8"
+    "prisma": "^4.15.0"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
