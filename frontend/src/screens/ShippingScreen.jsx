@@ -2,15 +2,13 @@
 
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { saveShippingAddress } from '../slices/cartSlice';
+import { useCartStore } from '../state/store'; // import useCartStore
 
 const ShippingScreen = () => {
-  const cart = useSelector((state) => state.cart);
-  const { shippingAddress } = cart;
+  const { shippingAddress, saveShippingAddress } = useCartStore(); // get state and action from useCartStore
 
   const [address, setAddress] = useState(shippingAddress.address || '');
   const [city, setCity] = useState(shippingAddress.city || '');
@@ -19,12 +17,11 @@ const ShippingScreen = () => {
   );
   const [country, setCountry] = useState(shippingAddress.country || '');
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    saveShippingAddress({ address, city, postalCode, country }); // use the action from useCartStore
     navigate('/payment');
   };
 
