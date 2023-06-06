@@ -1,8 +1,10 @@
 // backend\controllers\userController.js
 
+import bcrypt from "bcryptjs";
 import asyncHandler from '../middleware/asyncHandler.js';
 import generateToken from '../utils/generateToken.js';
 import User from '../models/userModel.js';
+import { db } from "../database/prisma/prismaClient.js";
 
 // @desc    Login user & get token
 // @route   POST /api/users/login
@@ -33,24 +35,23 @@ const loginUser = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+  const userExists = await db.user.findUnique({ where: { email } });
 
   if (userExists) {
     res.status(400);
     throw new Error('User already exists');
   }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await db.user.create({
+    data: { name, password: hashedPassword, email, isAdmin: false },
   });
 
   if (user) {
-    generateToken(res, user._id);
+    generateToken(res, user.id);
 
     res.status(201).json({
-      _id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
