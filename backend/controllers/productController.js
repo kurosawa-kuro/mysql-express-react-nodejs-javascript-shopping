@@ -1,28 +1,35 @@
 // backend\controllers\productController.js
 
 import asyncHandler from '../middleware/asyncHandler.js';
-import Product from '../models/productModel.js';
+import { db } from '../database/prisma/prismaClient.js';
 
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = process.env.PAGINATION_LIMIT;
+  const pageSize = Number(process.env.PAGINATION_LIMIT);
+  console.log('productController.js getProducts() pageSize:', pageSize);
   const page = Number(req.query.pageNumber) || 1;
+  console.log('productController.js getProducts() page:', page);
 
   const keyword = req.query.keyword
     ? {
       name: {
-        $regex: req.query.keyword,
-        $options: 'i',
+        contains: req.query.keyword,
+        mode: 'insensitive'
       },
     }
     : {};
 
-  const count = await Product.countDocuments({ ...keyword });
-  const products = await Product.find({ ...keyword })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1));
+  const count = await db.product.count({
+    where: keyword,
+  });
+
+  const products = await db.product.findMany({
+    where: keyword,
+    take: pageSize,
+    skip: pageSize * (page - 1),
+  });
 
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
@@ -31,7 +38,10 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await db.product.findUnique({
+    where: { id: Number(req.params.id) }
+  });
+
   if (product) {
     return res.json(product);
   }
@@ -43,19 +53,19 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const product = new Product({
+  const product = {
     name: 'Sample name',
     price: 0,
-    user: req.user._id,
+    userId: req.user.id,
     image: '/images/sample.jpg',
     brand: 'Sample brand',
     category: 'Sample category',
     countInStock: 0,
     numReviews: 0,
     description: 'Sample description',
-  });
+  };
 
-  const createdProduct = await product.save();
+  const createdProduct = await db.product.create({ data: product });
   res.status(201).json(createdProduct);
 });
 
@@ -63,22 +73,15 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const { name, price, description, image, brand, category, countInStock } = req.body;
 
-  const product = await Product.findById(req.params.id);
+  const product = await db.product.update({
+    where: { id: Number(req.params.id) },
+    data: { name, price, description, image, brand, category, countInStock },
+  });
 
   if (product) {
-    product.name = name;
-    product.price = price;
-    product.description = description;
-    product.image = image;
-    product.brand = brand;
-    product.category = category;
-    product.countInStock = countInStock;
-
-    const updatedProduct = await product.save();
-    res.json(updatedProduct);
+    res.json(product);
   } else {
     res.status(404);
     throw new Error('Product not found');
@@ -89,10 +92,11 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:id
 // @access  Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  const product = await db.product.delete({
+    where: { id: Number(req.params.id) }
+  });
 
   if (product) {
-    await Product.deleteOne({ _id: product._id });
     res.json({ message: 'Product removed' });
   } else {
     res.status(404);
@@ -106,11 +110,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
 
-  const product = await Product.findById(req.params.id);
+  const product = await db.product.findUnique({
+    where: { id: Number(req.params.id) },
+  });
 
   if (product) {
     const alreadyReviewed = product.reviews.find(
-      (r) => r.user.toString() === req.user._id.toString()
+      (r) => r.userId.toString() === req.user.id.toString()
     );
 
     if (alreadyReviewed) {
@@ -122,7 +128,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       name: req.user.name,
       rating: Number(rating),
       comment,
-      user: req.user._id,
+      userId: req.user.id,
     };
 
     product.reviews.push(review);
@@ -133,7 +139,11 @@ const createProductReview = asyncHandler(async (req, res) => {
       product.reviews.reduce((acc, item) => item.rating + acc, 0) /
       product.reviews.length;
 
-    await product.save();
+    await db.product.update({
+      where: { id: Number(req.params.id) },
+      data: { reviews: product.reviews, numReviews: product.numReviews, rating: product.rating },
+    });
+
     res.status(201).json({ message: 'Review added' });
   } else {
     res.status(404);
@@ -145,7 +155,10 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route   GET /api/products/top
 // @access  Public
 const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+  const products = await db.product.findMany({
+    orderBy: { rating: 'desc' },
+    take: 3,
+  });
 
   res.json(products);
 });
@@ -159,3 +172,4 @@ export {
   createProductReview,
   getTopProducts,
 };
+

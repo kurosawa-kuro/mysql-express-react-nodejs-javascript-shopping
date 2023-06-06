@@ -89,14 +89,14 @@ const ProductListScreen = () => {
             </thead>
             <tbody>
               {productsData && productsData.products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
+                <tr key={product.id}>
+                  <td>{product.id}</td>
                   <td>{product.name}</td>
                   <td>${product.price}</td>
                   <td>{product.category}</td>
                   <td>{product.brand}</td>
                   <td>
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                    <LinkContainer to={`/admin/product/${product.id}/edit`}>
                       <Button variant='light' className='btn-sm mx-2'>
                         <FaEdit />
                       </Button>
@@ -104,7 +104,7 @@ const ProductListScreen = () => {
                     <Button
                       variant='danger'
                       className='btn-sm'
-                      onClick={() => deleteHandler(product._id)}
+                      onClick={() => deleteHandler(product.id)}
                     >
                       <FaTrash style={{ color: 'white' }} />
                     </Button>

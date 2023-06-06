@@ -83,11 +83,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
   console.log('--------- userController.js getUserProfile() req.user:', req.user);
   const userTest = await db.user.findUnique({ where: { id } });
   console.log('userController.js getUserProfile() user:', userTest);
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
 
   if (user) {
     res.json({
-      _id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
@@ -102,7 +102,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -115,7 +115,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.json({
-      _id: updatedUser._id,
+      id: updatedUser.id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
@@ -145,7 +145,7 @@ const deleteUser = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error('Can not delete admin user');
     }
-    await User.deleteOne({ _id: user._id });
+    await User.deleteOne({ id: user.id });
     res.json({ message: 'User removed' });
   } else {
     res.status(404);
@@ -180,7 +180,7 @@ const updateUser = asyncHandler(async (req, res) => {
     const updatedUser = await user.save();
 
     res.json({
-      _id: updatedUser._id,
+      id: updatedUser.id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,

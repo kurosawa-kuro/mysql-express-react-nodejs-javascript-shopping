@@ -32,11 +32,11 @@ const useCartStore = create((set) => ({
         : 'PayPal',
     addToCart: (item) => {
         set((state) => {
-            const existItem = state.cartItems.find((x) => x._id === item._id);
+            const existItem = state.cartItems.find((x) => x.id === item.id);
             let newCartItems;
             if (existItem) {
                 newCartItems = state.cartItems.map((x) =>
-                    x._id === existItem._id ? item : x
+                    x.id === existItem.id ? item : x
                 );
             } else {
                 newCartItems = [...state.cartItems, item];
@@ -53,7 +53,7 @@ const useCartStore = create((set) => ({
     },
     removeFromCart: (id) => {
         set((state) => {
-            const newCartItems = state.cartItems.filter((x) => x._id !== id);
+            const newCartItems = state.cartItems.filter((x) => x.id !== id);
             localStorage.setItem('cartItems', JSON.stringify(newCartItems));
             return {
                 ...state,

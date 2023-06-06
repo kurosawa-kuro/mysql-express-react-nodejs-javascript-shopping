@@ -3,6 +3,7 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from './asyncHandler.js';
 import User from '../models/userModel.js';
+import { db } from '../database/prisma/prismaClient.js';
 
 // User must be authenticated
 const protect = asyncHandler(async (req, res, next) => {
@@ -18,7 +19,12 @@ const protect = asyncHandler(async (req, res, next) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await User.findById(decoded.userId).select('-password');
+      // Fetch the user from the database without their password
+      const user = await db.user.findUnique({ where: { id: decoded.userId } });
+      const { password, ...userWithoutPassword } = user;
+
+      // Set the request user to the authenticated user
+      req.user = userWithoutPassword;
 
       next();
     } catch (error) {

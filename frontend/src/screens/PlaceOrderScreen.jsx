@@ -43,6 +43,7 @@ const PlaceOrderScreen = () => {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
+      console.log('debug _id cartItems', cartItems);
       const res = await createOrderApi({
         orderItems: cartItems,
         shippingAddress: shippingAddress,
@@ -54,7 +55,7 @@ const PlaceOrderScreen = () => {
       });
       clearCartItems(); // use the action from useCartStore
       setLoading(false);
-      navigate(`/order/${res._id}`);
+      navigate(`/order/${res.id}`);
     } catch (err) {
       setLoading(false);
       setError(err.message);

@@ -35,7 +35,7 @@ const UserListScreen = () => {
     if (window.confirm('Are you sure')) {
       try {
         await deleteUserApi(id);
-        setUsers(users.filter((user) => user._id !== id));
+        setUsers(users.filter((user) => user.id !== id));
         toast.success('User deleted successfully');
       } catch (err) {
         toast.error(err.message);
@@ -61,8 +61,8 @@ const UserListScreen = () => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user._id}</td>
+              <tr key={user.id}>
+                <td>{user.id}</td>
                 <td>{user.name}</td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
@@ -78,7 +78,7 @@ const UserListScreen = () => {
                   {userInfo.isAdmin && (
                     <>
                       <LinkContainer
-                        to={`/admin/user/${user._id}/edit`}
+                        to={`/admin/user/${user.id}/edit`}
                         style={{ marginRight: '10px' }}
                       >
                         <Button variant='light' className='btn-sm'>
@@ -88,7 +88,7 @@ const UserListScreen = () => {
                       <Button
                         variant='danger'
                         className='btn-sm'
-                        onClick={() => deleteHandler(user._id)}
+                        onClick={() => deleteHandler(user.id)}
                       >
                         <FaTrash style={{ color: 'white' }} />
                       </Button>
