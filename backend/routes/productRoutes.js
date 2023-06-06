@@ -34,7 +34,5 @@ router.route('/:id')
 // Product Reviews Route
 router.route('/:id/reviews').post(protect, createProductReview);
 
-
-
 // Export Router
 export default router;
