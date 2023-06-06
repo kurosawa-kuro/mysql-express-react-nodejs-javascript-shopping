@@ -5,7 +5,7 @@ import express from 'express';
 
 // Internal Imports
 import {
-  authUser,
+  loginUser,
   registerUser,
   logoutUser,
   getUserProfile,
@@ -24,7 +24,7 @@ const router = express.Router();
 router.route('/register').post(registerUser);
 
 // User Login and Logout Routes
-router.post('/login', authUser);
+router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 
 // User Profile Routes (Get and Update)
