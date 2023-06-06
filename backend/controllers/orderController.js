@@ -17,40 +17,32 @@ const addOrderItems = asyncHandler(async (req, res) => {
     totalPrice,
   } = req.body;
 
-
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error('No order items');
   } else {
-
     console.log('orderController.js addOrderItems() orderItems:', orderItems);
-    // Orderにインサート
+
     const createdOrder = await db.order.create({
       data: {
-        userId: req.user.id,  // Assuming `req.user` contains authenticated user
+        userId: req.user.id,
         address: shippingAddress.address,
-        city: shippingAddress.city, // city, country, postalCode should be included in the shippingAddress object or can be fetched separately.
+        city: shippingAddress.city,
         postalCode: shippingAddress.postalCode,
         country: shippingAddress.country,
         paymentMethod: paymentMethod,
-        paymentResultId: 'Payment result ID', // Assuming you have paymentResultId
-        paymentResultStatus: 'Payment result status', // Assuming you have paymentResultStatus
-        paymentResultUpdateTime: 'Payment result update time', // Assuming you have paymentResultUpdateTime
-        paymentResultEmail: 'Payment result email', // Assuming you have paymentResultEmail
         itemsPrice: parseFloat(itemsPrice),
         taxPrice: parseFloat(taxPrice),
         shippingPrice: parseFloat(shippingPrice),
         totalPrice: parseFloat(totalPrice),
-        isPaid: false, // Setting `isPaid` to false as the payment is not done yet
-        paidAt: null, // Setting `paidAt` to null as the payment is not done yet
-        isDelivered: false, // Setting `isDelivered` to false as the order is not delivered yet
-        deliveredAt: null, // Setting `deliveredAt` to null as the order is not delivered yet
+        isPaid: false,
+        paidAt: null,
+        isDelivered: false,
+        deliveredAt: null,
       },
     });
-    console.log('orderController.js addOrderItems() createdOrder:', createdOrder);
 
     for (const orderItem of orderItems) {
-      console.log('orderController.js addOrderItems() orderItem:', orderItem);
       await db.orderProduct.create({
         data: {
           order: {
@@ -63,9 +55,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
         },
       });
     }
-
-
-
 
     throw new Error('Debugging error in orderController.js addOrderItems()');
     res.status(201).json({});
