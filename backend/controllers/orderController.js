@@ -28,18 +28,18 @@ const addOrderItems = asyncHandler(async (req, res) => {
     const createdOrder = await db.order.create({
       data: {
         userId: req.user.id,  // Assuming `req.user` contains authenticated user
-        shippingAddress: `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postalCode}, ${shippingAddress.country}`,
-        city: 'Your city', // city, country, postalCode should be included in the shippingAddress object or can be fetched separately.
-        postalCode: 'Your postal code',
-        country: 'Your country',
+        address: shippingAddress.address,
+        city: shippingAddress.city, // city, country, postalCode should be included in the shippingAddress object or can be fetched separately.
+        postalCode: shippingAddress.postalCode,
+        country: shippingAddress.country,
         paymentMethod: paymentMethod,
         paymentResultId: 'Payment result ID', // Assuming you have paymentResultId
         paymentResultStatus: 'Payment result status', // Assuming you have paymentResultStatus
         paymentResultUpdateTime: 'Payment result update time', // Assuming you have paymentResultUpdateTime
         paymentResultEmail: 'Payment result email', // Assuming you have paymentResultEmail
-        itemsPrice: itemsPrice,
-        taxPrice: taxPrice,
-        shippingPrice: shippingPrice,
+        itemsPrice: parseFloat(itemsPrice),
+        taxPrice: parseFloat(taxPrice),
+        shippingPrice: parseFloat(shippingPrice),
         totalPrice: parseFloat(totalPrice),
         isPaid: false, // Setting `isPaid` to false as the payment is not done yet
         paidAt: null, // Setting `paidAt` to null as the payment is not done yet
@@ -47,12 +47,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
         deliveredAt: null, // Setting `deliveredAt` to null as the order is not delivered yet
       },
     });
-
     console.log('orderController.js addOrderItems() createdOrder:', createdOrder);
 
-    // OrderProductにインサート
-    // orderItemsをfor of でループして、orderProductsにインサートする
     for (const orderItem of orderItems) {
+      console.log('orderController.js addOrderItems() orderItem:', orderItem);
       await db.orderProduct.create({
         data: {
           order: {
@@ -61,6 +59,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
           product: {
             connect: { id: orderItem.id },
           },
+          qty: orderItem.qty,
         },
       });
     }

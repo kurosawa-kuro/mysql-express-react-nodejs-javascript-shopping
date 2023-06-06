@@ -45,7 +45,7 @@ model Product {
 model Order {
   id                      Int            @id @default(autoincrement())
   userId                  Int
-  shippingAddress         String
+  address                 String
   city                    String
   postalCode              String
   country                 String
@@ -70,11 +70,8 @@ model Order {
 
 model OrderProduct {
   orderId   Int
-  name      String?
-  qty       Int?
-  image     String?
-  price     Float?
   productId Int
+  qty       Int
   order     Order   @relation(fields: [orderId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
 

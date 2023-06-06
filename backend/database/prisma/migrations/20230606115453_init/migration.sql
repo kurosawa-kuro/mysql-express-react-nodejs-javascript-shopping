@@ -35,7 +35,7 @@ CREATE TABLE `Product` (
 CREATE TABLE `Order` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
-    `shippingAddress` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
     `city` VARCHAR(191) NOT NULL,
     `postalCode` VARCHAR(191) NOT NULL,
     `country` VARCHAR(191) NOT NULL,
@@ -61,11 +61,8 @@ CREATE TABLE `Order` (
 -- CreateTable
 CREATE TABLE `OrderProduct` (
     `orderId` INTEGER NOT NULL,
-    `name` VARCHAR(191) NULL,
-    `qty` INTEGER NULL,
-    `image` VARCHAR(191) NULL,
-    `price` DOUBLE NULL,
     `productId` INTEGER NOT NULL,
+    `qty` INTEGER NOT NULL,
 
     PRIMARY KEY (`orderId`, `productId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
