@@ -8,8 +8,8 @@ import User from '../models/userModel.js';
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  // console.log('authMiddleware.js protect() req.cookies:', req.cookies);
-  // console.log('authMiddleware.js protect() req.cookies.jwt:', req.cookies.jwt);
+  console.log('authMiddleware.js protect() req.cookies:', req.cookies);
+  console.log('authMiddleware.js protect() req.cookies.jwt:', req.cookies.jwt);
 
   // Read JWT from the 'jwt' cookie
   token = req.cookies.jwt;

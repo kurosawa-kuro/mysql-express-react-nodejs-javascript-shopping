@@ -13,7 +13,8 @@
     "data:destroy": "node backend/seeder -d",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
     "prisma:generate": "npx prisma generate --schema=./backend/database/prisma/schema.prisma",
-    "prisma:migrate": "npx prisma migrate dev --name init --schema=./backend/database/prisma/schema.prisma"
+    "prisma:migrate": "powershell Remove-Item -Recurse -Force ./backend/database/prisma/migrations/ && npx prisma migrate dev --name init --schema=./backend/database/prisma/schema.prisma",
+    "prisma:seed": "node backend/database/prisma/seed.js"
   },
   "author": "Brad Traversy",
   "license": "MIT",

@@ -80,6 +80,9 @@ const logoutUser = (req, res) => {
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
+  console.log('--------- userController.js getUserProfile() req.user:', req.user);
+  const userTest = await db.user.findUnique({ where: { id } });
+  console.log('userController.js getUserProfile() user:', userTest);
   const user = await User.findById(req.user._id);
 
   if (user) {
