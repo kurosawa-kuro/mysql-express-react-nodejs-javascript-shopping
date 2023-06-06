@@ -35,26 +35,15 @@ const addOrderItems = asyncHandler(async (req, res) => {
         taxPrice: parseFloat(taxPrice),
         shippingPrice: parseFloat(shippingPrice),
         totalPrice: parseFloat(totalPrice),
-        isPaid: false,
-        paidAt: null,
-        isDelivered: false,
-        deliveredAt: null,
+        orderProducts: {
+          create: orderItems.map(item => ({
+            productId: item.id,
+            qty: item.qty
+          })),
+        }
       },
     });
 
-    for (const orderItem of orderItems) {
-      await db.orderProduct.create({
-        data: {
-          order: {
-            connect: { id: createdOrder.id },
-          },
-          product: {
-            connect: { id: orderItem.id },
-          },
-          qty: orderItem.qty,
-        },
-      });
-    }
 
     throw new Error('Debugging error in orderController.js addOrderItems()');
     res.status(201).json({});
