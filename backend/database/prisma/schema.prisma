@@ -21,21 +21,62 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Product   Product[]
+  Order     Order[]
 }
 
 model Product {
-  id           Int      @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   userId       Int
   name         String
   image        String
   brand        String
   category     String
   description  String
-  rating       Int      @default(0)
-  numReviews   Int      @default(0)
-  price        Float    @default(0.00)
-  countInStock Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
+  rating       Int            @default(0)
+  numReviews   Int            @default(0)
+  price        Float          @default(0.00)
+  countInStock Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  user         User           @relation(fields: [userId], references: [id])
+  OrderProduct OrderProduct[]
+}
+
+model Order {
+  id                      Int            @id @default(autoincrement())
+  userId                  Int
+  shippingAddress         String
+  city                    String
+  postalCode              String
+  country                 String
+  paymentMethod           String
+  paymentResultId         String?
+  paymentResultStatus     String?
+  paymentResultUpdateTime String?
+  paymentResultEmail      String?
+  itemsPrice              Float          @default(0.00)
+  taxPrice                Float          @default(0.00)
+  shippingPrice           Float          @default(0.00)
+  totalPrice              Float          @default(0.00)
+  isPaid                  Boolean        @default(false)
+  paidAt                  DateTime?
+  isDelivered             Boolean        @default(false)
+  deliveredAt             DateTime?
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  user                    User           @relation(fields: [userId], references: [id])
+  orderProducts           OrderProduct[]
+}
+
+model OrderProduct {
+  orderId   Int
+  name      String?
+  qty       Int?
+  image     String?
+  price     Float?
+  productId Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@id([orderId, productId])
 }

@@ -1,7 +1,7 @@
 // backend\controllers\orderController.js
 
+import { db } from '../database/prisma/prismaClient.js';
 import asyncHandler from '../middleware/asyncHandler.js';
-import Order from '../models/orderModel.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -24,7 +24,51 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } else {
 
     console.log('orderController.js addOrderItems() orderItems:', orderItems);
+    // Orderにインサート
+    const createdOrder = await db.order.create({
+      data: {
+        userId: req.user.id,  // Assuming `req.user` contains authenticated user
+        shippingAddress: `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.postalCode}, ${shippingAddress.country}`,
+        city: 'Your city', // city, country, postalCode should be included in the shippingAddress object or can be fetched separately.
+        postalCode: 'Your postal code',
+        country: 'Your country',
+        paymentMethod: paymentMethod,
+        paymentResultId: 'Payment result ID', // Assuming you have paymentResultId
+        paymentResultStatus: 'Payment result status', // Assuming you have paymentResultStatus
+        paymentResultUpdateTime: 'Payment result update time', // Assuming you have paymentResultUpdateTime
+        paymentResultEmail: 'Payment result email', // Assuming you have paymentResultEmail
+        itemsPrice: itemsPrice,
+        taxPrice: taxPrice,
+        shippingPrice: shippingPrice,
+        totalPrice: parseFloat(totalPrice),
+        isPaid: false, // Setting `isPaid` to false as the payment is not done yet
+        paidAt: null, // Setting `paidAt` to null as the payment is not done yet
+        isDelivered: false, // Setting `isDelivered` to false as the order is not delivered yet
+        deliveredAt: null, // Setting `deliveredAt` to null as the order is not delivered yet
+      },
+    });
 
+    console.log('orderController.js addOrderItems() createdOrder:', createdOrder);
+
+    // OrderProductにインサート
+    // orderItemsをfor of でループして、orderProductsにインサートする
+    for (const orderItem of orderItems) {
+      await db.orderProduct.create({
+        data: {
+          order: {
+            connect: { id: createdOrder.id },
+          },
+          product: {
+            connect: { id: orderItem.id },
+          },
+        },
+      });
+    }
+
+
+
+
+    throw new Error('Debugging error in orderController.js addOrderItems()');
     res.status(201).json({});
   }
 });
