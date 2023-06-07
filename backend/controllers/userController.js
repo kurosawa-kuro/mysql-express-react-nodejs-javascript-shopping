@@ -5,17 +5,19 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import generateToken from '../utils/generateToken.js';
 import { db } from "../database/prisma/prismaClient.js";
 
+const removePasswordFromUserObject = (user) => {
+  let userWithoutPassword = Object.assign({}, user);
+  delete userWithoutPassword.password;
+  return userWithoutPassword;
+};
+
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await db.user.findUnique({ where: { email } });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    let userWithoutPassword = Object.assign({}, user);
-    delete userWithoutPassword.password;
-
     generateToken(res, user.id);
-
-    res.json(userWithoutPassword);
+    res.json(removePasswordFromUserObject(user));
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
@@ -41,12 +43,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    let userWithoutPassword = Object.assign({}, user);
-    delete userWithoutPassword.password;
-
     generateToken(res, user.id);
-
-    res.status(201).json(userWithoutPassword);
+    res.status(201).json(removePasswordFromUserObject(user));
   } else {
     res.status(400);
     throw new Error('Invalid user data');
@@ -66,10 +64,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
-    let userWithoutPassword = Object.assign({}, user);
-    delete userWithoutPassword.password;
-
-    res.json(userWithoutPassword);
+    res.json(removePasswordFromUserObject(user));
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -90,10 +85,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       },
     });
 
-    let userWithoutPassword = Object.assign({}, updatedUser);
-    delete userWithoutPassword.password;
-
-    res.json(userWithoutPassword);
+    res.json(removePasswordFromUserObject(updatedUser));
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -128,10 +120,7 @@ const getUserById = asyncHandler(async (req, res) => {
   const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
-    let userWithoutPassword = Object.assign({}, user);
-    delete userWithoutPassword.password;
-
-    res.json(userWithoutPassword);
+    res.json(removePasswordFromUserObject(user));
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -152,12 +141,11 @@ const updateUser = asyncHandler(async (req, res) => {
       },
     });
 
-    const { name, email, isAdmin } = updatedUser;
     res.json({
       id,
-      name,
-      email,
-      isAdmin,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
     });
   } else {
     res.status(404);
