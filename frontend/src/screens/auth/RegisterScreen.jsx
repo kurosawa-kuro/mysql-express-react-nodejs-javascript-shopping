@@ -54,7 +54,7 @@ const RegisterScreen = () => {
             placeholder='Enter name'
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md"
+            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md h-10"
           />
         </div>
         <div className="mb-4">
@@ -64,7 +64,7 @@ const RegisterScreen = () => {
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md"
+            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md h-10"
           />
         </div>
         <div className="mb-4">
@@ -74,7 +74,7 @@ const RegisterScreen = () => {
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md"
+            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md h-10"
           />
         </div>
         <div className="mb-4">
@@ -84,7 +84,7 @@ const RegisterScreen = () => {
             placeholder="Confirm password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md"
+            className="mt-1 block w-full shadow-sm sm:text-sm rounded-md h-10"
           />
         </div>
         <button disabled={isLoading} type="submit" className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

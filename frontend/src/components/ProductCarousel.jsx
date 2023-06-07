@@ -29,7 +29,7 @@ const ProductCarousel = () => {
   return isLoading ? null : error ? (
     <Message variant='danger'>{error?.data?.message || error.message}</Message>
   ) : (
-    <Carousel className="h-[250px]" showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
+    <Carousel className="h-[250px]" showThumbs={false} showStatus={false} infiniteLoop useKeyboardArrows autoPlay>
       {products.map((product) => (
         <div key={product.id} className="relative">
           <Link to={`/product/${product.id}`}>
