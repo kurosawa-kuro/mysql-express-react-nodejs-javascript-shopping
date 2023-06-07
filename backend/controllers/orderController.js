@@ -47,9 +47,9 @@ const getMyOrders = asyncHandler(async (req, res) => {
 });
 
 const getOrderById = asyncHandler(async (req, res) => {
-  const orderId = Number(req.params.id);
+  const id = Number(req.params.id);
   const order = await db.order.findUnique({
-    where: { id: orderId },
+    where: { id },
     include: { user: true, orderProducts: { include: { product: true } } }
   });
 
@@ -62,9 +62,9 @@ const getOrderById = asyncHandler(async (req, res) => {
 });
 
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const orderId = Number(req.params.id);
+  const id = Number(req.params.id);
   const order = await db.order.findUnique({
-    where: { id: orderId },
+    where: { id },
     include: { user: true, orderProducts: { include: { product: true } } }
   });
 
@@ -74,7 +74,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   }
 
   const updatedOrder = await db.order.update({
-    where: { id: orderId },
+    where: { id },
     data: {
       isPaid: true,
       paidAt: new Date(),
@@ -89,9 +89,9 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 });
 
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  const orderId = Number(req.params.id);
+  const id = Number(req.params.id);
   const order = await db.order.findUnique({
-    where: { id: orderId },
+    where: { id },
     include: { user: true, orderProducts: { include: { product: true } } }
   });
 
@@ -101,7 +101,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
   }
 
   const updatedOrder = await db.order.update({
-    where: { id: orderId },
+    where: { id },
     data: {
       isDelivered: true,
       deliveredAt: new Date(),
