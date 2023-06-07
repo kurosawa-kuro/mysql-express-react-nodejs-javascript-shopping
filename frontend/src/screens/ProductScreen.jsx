@@ -39,7 +39,6 @@ const ProductScreen = () => {
     try {
       setLoading(true);
       const product = await getProductDetailsApi(productId);
-      console.log(product);
       setProduct(product);
       setLoading(false);
     } catch (err) {

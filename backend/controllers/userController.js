@@ -10,15 +10,12 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await db.user.findUnique({ where: { email } });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    const { id, name, isAdmin } = user;
-    generateToken(res, id);
+    let userWithoutPassword = Object.assign({}, user);
+    delete userWithoutPassword.password;
 
-    res.json({
-      id,
-      name,
-      email,
-      isAdmin,
-    });
+    generateToken(res, user.id);
+
+    res.json(userWithoutPassword);
   } else {
     res.status(401);
     throw new Error('Invalid email or password');
@@ -44,15 +41,12 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const { id, isAdmin } = user;
-    generateToken(res, id);
+    let userWithoutPassword = Object.assign({}, user);
+    delete userWithoutPassword.password;
 
-    res.status(201).json({
-      id,
-      name,
-      email,
-      isAdmin,
-    });
+    generateToken(res, user.id);
+
+    res.status(201).json(userWithoutPassword);
   } else {
     res.status(400);
     throw new Error('Invalid user data');
@@ -72,13 +66,10 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
-    const { name, email, isAdmin } = user;
-    res.json({
-      id,
-      name,
-      email,
-      isAdmin,
-    });
+    let userWithoutPassword = Object.assign({}, user);
+    delete userWithoutPassword.password;
+
+    res.json(userWithoutPassword);
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -99,13 +90,10 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       },
     });
 
-    const { name, email, isAdmin } = updatedUser;
-    res.json({
-      id,
-      name,
-      email,
-      isAdmin,
-    });
+    let userWithoutPassword = Object.assign({}, updatedUser);
+    delete userWithoutPassword.password;
+
+    res.json(userWithoutPassword);
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -140,7 +128,10 @@ const getUserById = asyncHandler(async (req, res) => {
   const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
-    res.json(user);
+    let userWithoutPassword = Object.assign({}, user);
+    delete userWithoutPassword.password;
+
+    res.json(userWithoutPassword);
   } else {
     res.status(404);
     throw new Error('User not found');

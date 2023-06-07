@@ -10,11 +10,7 @@ import { useAuthStore, useCartStore } from '../state/store';
 import { logoutUserApi } from '../services/api';  // Import the api function
 
 const Header = () => {
-  console.log('Header');
-  console.log('Header useCartStore() useCartStore()', useCartStore());
   const { cartItems } = useCartStore();
-
-  console.log('Header useCartStore() cartItems', cartItems);
   const { userInfo, logout } = useAuthStore();
   const navigate = useNavigate();
 

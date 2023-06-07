@@ -13,8 +13,7 @@ const CartScreen = () => {
     cartItems,
     addToCart,
     removeFromCart
-  } = useCartStore();  // get state and functions from useCartStore
-  console.log('CartScreen useCartStore() useCartStore()', useCartStore());
+  } = useCartStore();
 
   const addToCartHandler = async (product, qty) => {
     addToCart({ ...product, qty });

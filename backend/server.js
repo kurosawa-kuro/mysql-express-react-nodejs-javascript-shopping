@@ -15,7 +15,6 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-import connectDB from './config/db.js';
 
 // Load Environment Variables
 dotenv.config();
@@ -26,8 +25,6 @@ const app = express();
 if (process.env.NODE_ENV === 'development') { // Add this block
   app.use(morgan('dev'));
 }
-
-connectDB();
 
 // Middleware Configuration
 app.use(express.json());
