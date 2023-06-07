@@ -134,7 +134,7 @@ async function createProducts() {
         const { name, image, description, brand, category, price, countInStock, rating, numReviews } = product;
 
         await db.product.create({
-            data: { name, image, description, brand, category, price, countInStock, rating: parseInt(rating), numReviews, userId: 1 },
+            data: { name, image, description, brand, category, price, countInStock, rating: Number(rating), numReviews, userId: 1 },
         });
     }
 
