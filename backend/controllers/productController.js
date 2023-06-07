@@ -1,5 +1,3 @@
-// backend\controllers\productController.js
-
 import asyncHandler from '../middleware/asyncHandler.js';
 import { db } from '../database/prisma/prismaClient.js';
 
@@ -8,8 +6,7 @@ const pageSize = Number(process.env.PAGINATION_LIMIT);
 const getKeywordFilter = (keyword) => keyword
   ? {
     name: {
-      contains: keyword,
-      mode: 'insensitive'
+      contains: keyword
     }
   }
   : {};
