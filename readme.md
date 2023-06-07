@@ -1,6 +1,6 @@
 # mysql-express-react-nodejs-javascript-shopping
 
-```
+
 #### ユーザー管理
 
 **ユーザー向け機能**
@@ -53,7 +53,6 @@
 **ユーザー向け機能**
 
 1. 画像のアップロード: POST `/api/upload`
-```
 
 ![shopping_er](https://github.com/kurosawa-kuro/mysql-express-react-nodejs-javascript-shopping/assets/15902862/e1fbbe66-d42d-470b-9862-6b42d8eab6aa)
 
