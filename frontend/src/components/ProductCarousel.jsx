@@ -32,8 +32,8 @@ const ProductCarousel = () => {
     <Carousel className="h-[250px]" showThumbs={false} showStatus={false} infiniteLoop useKeyboardArrows autoPlay>
       {products.map((product) => (
         <div key={product.id} className="relative">
-          <Link to={`/product/${product.id}`}>
-            <img src={product.image} alt={product.name} className="object-contain w-full h-[250px]" />
+          <Link to={`/product/${product.id}`} className="block w-full h-[250px]">
+            <img src={product.image} alt={product.name} className="object-contain w-full h-full" />
             <p className='absolute bottom-0 text-white text-right bg-black bg-opacity-50 p-2'>
               {product.name} (${product.price})
             </p>

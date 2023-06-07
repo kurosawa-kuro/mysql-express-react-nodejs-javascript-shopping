@@ -147,7 +147,7 @@ const ProfileScreen = () => {
           ) : (
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 overflow-x-auto">
               <table className="min-w-full leading-normal">
-                <thead>
+                <thead className=''>
                   <tr>
                     <th>ID</th>
                     <th>DATE</th>
@@ -159,7 +159,7 @@ const ProfileScreen = () => {
                 </thead>
                 <tbody>
                   {orders.map((order) => (
-                    <tr key={order.id} style={{ height: '80px', padding: '10px 0' }}>
+                    <tr key={order.id} style={{ height: '45px', padding: '5px 0' }}>
                       <td>{order.id}</td>
                       <td>{order.createdAt.substring(0, 10)}</td>
                       <td>{order.totalPrice}</td>
@@ -170,7 +170,7 @@ const ProfileScreen = () => {
                           <FaTimes style={{ color: 'red' }} />
                         )}
                       </td>
-                      <td>
+                      <td style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         {order.isDelivered ? (
                           order.deliveredAt.substring(0, 10)
                         ) : (
