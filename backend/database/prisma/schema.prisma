@@ -76,4 +76,5 @@ model OrderProduct {
   product   Product @relation(fields: [productId], references: [id])
 
   @@id([orderId, productId])
+  @@map("order_product")
 }
