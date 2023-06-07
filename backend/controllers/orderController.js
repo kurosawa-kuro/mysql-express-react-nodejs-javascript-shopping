@@ -3,6 +3,14 @@
 import { db } from '../database/prisma/prismaClient.js';
 import asyncHandler from '../middleware/asyncHandler.js';
 
+// Helper function to get order by ID with necessary includes
+const findOrderById = async (id) => {
+  return await db.order.findUnique({
+    where: { id },
+    include: { user: true, orderProducts: { include: { product: true } } }
+  });
+};
+
 const addOrderItems = asyncHandler(async (req, res) => {
   const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
 
@@ -48,10 +56,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 
 const getOrderById = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
-  const order = await db.order.findUnique({
-    where: { id },
-    include: { user: true, orderProducts: { include: { product: true } } }
-  });
+  const order = await findOrderById(id);
 
   if (!order) {
     res.status(404);
@@ -63,10 +68,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 const updateOrderToPaid = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
-  const order = await db.order.findUnique({
-    where: { id },
-    include: { user: true, orderProducts: { include: { product: true } } }
-  });
+  const order = await findOrderById(id);
 
   if (!order) {
     res.status(404);
@@ -90,10 +92,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
-  const order = await db.order.findUnique({
-    where: { id },
-    include: { user: true, orderProducts: { include: { product: true } } }
-  });
+  const order = await findOrderById(id);
 
   if (!order) {
     res.status(404);
