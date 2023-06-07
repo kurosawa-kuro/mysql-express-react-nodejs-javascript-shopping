@@ -110,16 +110,16 @@ const PlaceOrderScreen = () => {
         <div className="w-full md:w-1/3 px-2 mb-4">
           <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-2">Order Summary</h2>
-            <div className="my-2">
-              <div className="flex justify-between">
+            <div className="my-4">
+              <div className="flex items-center justify-between mb-4">
                 <div>Items</div>
                 <div>${cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)}</div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <div>Shipping</div>
                 <div>${shippingPrice}</div>
               </div>
-              <div className="flex justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <div>Tax</div>
                 <div>${taxPrice}</div>
               </div>
