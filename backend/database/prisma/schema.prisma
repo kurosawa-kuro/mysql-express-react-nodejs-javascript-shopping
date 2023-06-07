@@ -48,7 +48,6 @@ model Order {
   address                 String
   city                    String
   postalCode              String
-  country                 String
   paymentMethod           String
   paymentResultId         String?
   paymentResultStatus     String?

@@ -14,13 +14,12 @@ const ShippingScreen = () => {
   const [postalCode, setPostalCode] = useState(
     shippingAddress.postalCode || ''
   );
-  const [country, setCountry] = useState(shippingAddress.country || '');
 
   const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    saveShippingAddress({ address, city, postalCode, country }); // use the action from useCartStore
+    saveShippingAddress({ address, city, postalCode });
     navigate('/payment');
   };
 
@@ -62,18 +61,6 @@ const ShippingScreen = () => {
             value={postalCode}
             required
             onChange={(e) => setPostalCode(e.target.value)}
-          />
-        </div>
-
-        <div className='mb-4' id='country'>
-          <label className="block text-gray-700 text-sm font-bold mb-2">Country</label>
-          <input
-            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            type='text'
-            placeholder='Enter country'
-            value={country}
-            required
-            onChange={(e) => setCountry(e.target.value)}
           />
         </div>
 

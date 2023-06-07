@@ -38,7 +38,6 @@ CREATE TABLE `Order` (
     `address` VARCHAR(191) NOT NULL,
     `city` VARCHAR(191) NOT NULL,
     `postalCode` VARCHAR(191) NOT NULL,
-    `country` VARCHAR(191) NOT NULL,
     `paymentMethod` VARCHAR(191) NOT NULL,
     `paymentResultId` VARCHAR(191) NULL,
     `paymentResultStatus` VARCHAR(191) NULL,

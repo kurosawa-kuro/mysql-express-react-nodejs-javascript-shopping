@@ -84,7 +84,7 @@ const OrderScreen = () => {
               </p>
               <p>
                 <span className="font-bold">Address:</span>
-                {order.address}, {order.city} {order.postalCode}, {order.country}
+                {order.address}, {order.city} {order.postalCode}
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>

@@ -25,7 +25,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
       address: shippingAddress.address,
       city: shippingAddress.city,
       postalCode: shippingAddress.postalCode,
-      country: shippingAddress.country,
       paymentMethod: paymentMethod,
       itemsPrice: parseFloat(itemsPrice),
       taxPrice: parseFloat(taxPrice),

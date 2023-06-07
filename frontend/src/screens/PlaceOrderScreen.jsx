@@ -71,8 +71,7 @@ const PlaceOrderScreen = () => {
             <p>
               <strong>Address:</strong>
               {shippingAddress.address}, {shippingAddress.city}{' '}
-              {shippingAddress.postalCode},{' '}
-              {shippingAddress.country}
+              {shippingAddress.postalCode}
             </p>
 
             <h2 className="text-2xl font-bold mb-2 mt-4">Payment Method</h2>
