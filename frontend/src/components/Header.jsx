@@ -1,18 +1,29 @@
-// frontend\src\components\Header.jsx
-
-import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
-import { LinkContainer } from 'react-router-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { FaShoppingCart, FaUser, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchBox from './SearchBox';
 import logo from '../assets/logo.png';
 import { useAuthStore, useCartStore } from '../state/store';
-import { logoutUserApi } from '../services/api';  // Import the api function
+import { logoutUserApi } from '../services/api';
 
 const Header = () => {
   const { cartItems } = useCartStore();
   const { userInfo, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', closeDropdown);
+    return () => document.removeEventListener('mousedown', closeDropdown);
+  }, []);
 
   const logoutHandler = async () => {
     try {
@@ -25,66 +36,62 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <Navbar bg='primary' variant='dark' expand='lg' collapseOnSelect>
-        <Container>
-          <LinkContainer to='/'>
-            <Navbar.Brand>
-              <img src={logo} alt='ProShop' />
-              ProShop
-            </Navbar.Brand>
-          </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='ms-auto'>
-              <SearchBox />
-              <LinkContainer to='/cart'>
-                <Nav.Link>
-                  <FaShoppingCart /> Cart
-                  {cartItems.length > 0 && (
-                    <Badge pill bg='success' style={{ marginLeft: '5px' }}>
-                      {cartItems.reduce((a, c) => a + c.qty, 0)}
-                    </Badge>
+    <header className='bg-blue-500 text-white py-3'>
+      <div className='container mx-auto px-4 flex items-center justify-between'>
+        <Link to='/' className='flex items-center space-x-2'>
+          {/* <img src={logo} alt='ProShop' className='w-10 h-10' /> */}
+          <span className='font-semibold text-xl'>Shop</span>
+        </Link>
+        <div className='flex items-center space-x-8'>
+          <SearchBox />
+          <Link to='/cart' className='flex items-center space-x-2'>
+            <FaShoppingCart className='w-5 h-5' />
+            <span>Cart</span>
+            {cartItems.length > 0 && (
+              <span className='inline-block bg-green-500 rounded-full text-sm px-2'>
+                {cartItems.reduce((a, c) => a + c.qty, 0)}
+              </span>
+            )}
+          </Link>
+          {userInfo ? (
+            <div className='relative inline-block text-left' ref={dropdownRef}>
+              <div>
+                <button
+                  type='button'
+                  onClick={() => setIsOpen(!isOpen)}
+                  className='flex items-center space-x-2'
+                >
+                  <FaUser className='w-5 h-5' />
+                  <span>{userInfo.name}</span>
+                  {isOpen ? (
+                    <FaChevronUp className='w-5 h-5' />
+                  ) : (
+                    <FaChevronDown className='w-5 h-5' />
                   )}
-                </Nav.Link>
-              </LinkContainer>
-              {userInfo ? (
-                <>
-                  <NavDropdown title={userInfo.name} id='username'>
-                    <LinkContainer to='/profile'>
-                      <NavDropdown.Item>Profile</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Item onClick={logoutHandler}>
-                      Logout
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </>
-              ) : (
-                <LinkContainer to='/login'>
-                  <Nav.Link>
-                    <FaUser /> Sign In
-                  </Nav.Link>
-                </LinkContainer>
-              )}
+                </button>
+              </div>
 
-              {/* Admin Links */}
-              {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin' id='adminmenu'>
-                  <LinkContainer to='/admin/product-list'>
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/order-list'>
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/user-list'>
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
+              {isOpen && (
+                <div className='origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5'>
+                  <div className='py-1' role='menu' aria-orientation='vertical' aria-labelledby='options-menu'>
+                    <Link to='/profile' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' role='menuitem'>
+                      Profile
+                    </Link>
+                    <button onClick={logoutHandler} className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' role='menuitem'>
+                      Logout
+                    </button>
+                  </div>
+                </div>
               )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+            </div>
+          ) : (
+            <Link to='/login' className='flex items-center space-x-2'>
+              <FaUser className='w-5 h-5' />
+              <span>Sign In</span>
+            </Link>
+          )}
+        </div>
+      </div>
     </header>
   );
 };

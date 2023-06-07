@@ -1,7 +1,6 @@
 // frontend\src\screens\ShippingScreen.jsx
 
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
@@ -28,56 +27,60 @@ const ShippingScreen = () => {
   return (
     <FormContainer>
       <CheckoutSteps step1 step2 />
-      <h1>Shipping</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group className='my-2' controlId='address'>
-          <Form.Label>Address</Form.Label>
-          <Form.Control
+      <h1 className="text-3xl mb-4">Shipping</h1>
+      <form onSubmit={submitHandler}>
+        <div className='mb-4' id='address'>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Address</label>
+          <input
+            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
             type='text'
             placeholder='Enter address'
             value={address}
             required
             onChange={(e) => setAddress(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+          />
+        </div>
 
-        <Form.Group className='my-2' controlId='city'>
-          <Form.Label>City</Form.Label>
-          <Form.Control
+        <div className='mb-4' id='city'>
+          <label className="block text-gray-700 text-sm font-bold mb-2">City</label>
+          <input
+            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
             type='text'
             placeholder='Enter city'
             value={city}
             required
             onChange={(e) => setCity(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+          />
+        </div>
 
-        <Form.Group className='my-2' controlId='postalCode'>
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
+        <div className='mb-4' id='postalCode'>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Postal Code</label>
+          <input
+            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
             type='text'
             placeholder='Enter postal code'
             value={postalCode}
             required
             onChange={(e) => setPostalCode(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+          />
+        </div>
 
-        <Form.Group className='my-2' controlId='country'>
-          <Form.Label>Country</Form.Label>
-          <Form.Control
+        <div className='mb-4' id='country'>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Country</label>
+          <input
+            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
             type='text'
             placeholder='Enter country'
             value={country}
             required
             onChange={(e) => setCountry(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
+          />
+        </div>
 
-        <Button type='submit' variant='primary'>
+        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
           Continue
-        </Button>
-      </Form>
+        </button>
+      </form>
     </FormContainer>
   );
 };

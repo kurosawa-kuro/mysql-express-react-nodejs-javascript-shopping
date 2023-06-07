@@ -1,10 +1,9 @@
-// frontend\src\components\ProductCarousel.jsx
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Carousel, Image } from 'react-bootstrap';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import Message from './Message';
-import { getTopProductsApi } from '../services/api'; // this should be your API call function
+import { getTopProductsApi } from '../services/api';
 
 const ProductCarousel = () => {
   const [products, setProducts] = useState([]);
@@ -30,18 +29,16 @@ const ProductCarousel = () => {
   return isLoading ? null : error ? (
     <Message variant='danger'>{error?.data?.message || error.message}</Message>
   ) : (
-    <Carousel pause='hover' className='bg-primary mb-4'>
+    <Carousel className="h-[250px]" showThumbs={false} infiniteLoop useKeyboardArrows autoPlay>
       {products.map((product) => (
-        <Carousel.Item key={product.id}>
+        <div key={product.id} className="relative">
           <Link to={`/product/${product.id}`}>
-            <Image src={product.image} alt={product.name} fluid />
-            <Carousel.Caption className='carousel-caption'>
-              <h2 className='text-white text-right'>
-                {product.name} (${product.price})
-              </h2>
-            </Carousel.Caption>
+            <img src={product.image} alt={product.name} className="object-contain w-full h-[250px]" />
+            <p className='absolute bottom-0 text-white text-right bg-black bg-opacity-50 p-2'>
+              {product.name} (${product.price})
+            </p>
           </Link>
-        </Carousel.Item>
+        </div>
       ))}
     </Carousel>
   );

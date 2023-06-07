@@ -1,7 +1,6 @@
 // frontend\src\screens\PaymentScreen.jsx
 
 import { useState, useEffect } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
@@ -32,28 +31,29 @@ const PaymentScreen = () => {
   return (
     <FormContainer>
       <CheckoutSteps step1 step2 step3 />
-      <h1>Payment Method</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group>
-          <Form.Label as='legend'>Select Method</Form.Label>
-          <Col>
-            <Form.Check
-              className='my-2'
-              type='radio'
-              label='PayPal or Credit Card'
-              id='PayPal'
-              name='paymentMethod'
-              value='PayPal'
-              checked
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            ></Form.Check>
-          </Col>
-        </Form.Group>
+      <h1 className="text-3xl mb-4">Payment Method</h1>
+      <form onSubmit={submitHandler}>
+        <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Select Method</label>
+          <div className="mt-2">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                className="form-radio text-blue-500"
+                name="paymentMethod"
+                value="PayPal"
+                checked
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              <span className="ml-2">PayPal or Credit Card</span>
+            </label>
+          </div>
+        </div>
 
-        <Button type='submit' variant='primary'>
+        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4' type='submit'>
           Continue
-        </Button>
-      </Form>
+        </button>
+      </form>
     </FormContainer>
   );
 };

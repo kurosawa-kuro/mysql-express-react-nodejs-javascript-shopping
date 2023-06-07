@@ -1,52 +1,51 @@
 // frontend\src\components\CheckoutSteps.jsx
 
 import React from 'react';
-import { Nav } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
   return (
-    <Nav className='justify-content-center mb-4'>
-      <Nav.Item>
+    <div className="flex justify-center mb-4 space-x-4">
+      <div>
         {step1 ? (
-          <LinkContainer to='/login'>
-            <Nav.Link>Sign In</Nav.Link>
-          </LinkContainer>
+          <Link to='/login' className="text-blue-500">
+            Sign In
+          </Link>
         ) : (
-          <Nav.Link disabled>Sign In</Nav.Link>
+          <span className="text-gray-500">Sign In</span>
         )}
-      </Nav.Item>
+      </div>
 
-      <Nav.Item>
+      <div>
         {step2 ? (
-          <LinkContainer to='/shipping'>
-            <Nav.Link>Shipping</Nav.Link>
-          </LinkContainer>
+          <Link to='/shipping' className="text-blue-500">
+            Shipping
+          </Link>
         ) : (
-          <Nav.Link disabled>Shipping</Nav.Link>
+          <span className="text-gray-500">Shipping</span>
         )}
-      </Nav.Item>
+      </div>
 
-      <Nav.Item>
+      <div>
         {step3 ? (
-          <LinkContainer to='/payment'>
-            <Nav.Link>Payment</Nav.Link>
-          </LinkContainer>
+          <Link to='/payment' className="text-blue-500">
+            Payment
+          </Link>
         ) : (
-          <Nav.Link disabled>Payment</Nav.Link>
+          <span className="text-gray-500">Payment</span>
         )}
-      </Nav.Item>
+      </div>
 
-      <Nav.Item>
+      <div>
         {step4 ? (
-          <LinkContainer to='/place-order'>
-            <Nav.Link>Place Order</Nav.Link>
-          </LinkContainer>
+          <Link to='/place-order' className="text-blue-500">
+            Place Order
+          </Link>
         ) : (
-          <Nav.Link disabled>Place Order</Nav.Link>
+          <span className="text-gray-500">Place Order</span>
         )}
-      </Nav.Item>
-    </Nav>
+      </div>
+    </div>
   );
 };
 

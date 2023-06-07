@@ -1,6 +1,5 @@
 // frontend\src\App.js
 import { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -27,10 +26,8 @@ const App = () => {
     <>
       <ToastContainer />
       <Header />
-      <main className='py-3'>
-        <Container>
-          <Outlet />
-        </Container>
+      <main className='py-8 mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl'>
+        <Outlet />
       </main>
       <Footer />
     </>

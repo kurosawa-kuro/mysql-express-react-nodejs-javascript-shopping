@@ -1,33 +1,28 @@
-// frontend\src\components\Product.jsx
-
-import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Rating from './Rating';
 
 const Product = ({ product }) => {
   return (
-    <Card className='my-3 p-3 rounded'>
+    <div className='my-3 p-3 bg-white rounded shadow'>
       <Link to={`/product/${product.id}`}>
-        <Card.Img src={product.image} variant='top' />
+        <img className='w-full h-64 object-cover rounded-t' src={product.image} alt={product.name} />
       </Link>
 
-      <Card.Body>
+      <div className='p-4'>
         <Link to={`/product/${product.id}`}>
-          <Card.Title as='div' className='product-title'>
-            <strong>{product.name}</strong>
-          </Card.Title>
+          <h2 className='text-lg font-semibold text-gray-700'>{product.name}</h2>
         </Link>
 
-        <Card.Text as='div'>
+        <div className='mt-2'>
           <Rating
             value={product.rating}
             text={`${product.numReviews} reviews`}
           />
-        </Card.Text>
+        </div>
 
-        <Card.Text as='h3'>${product.price}</Card.Text>
-      </Card.Body>
-    </Card>
+        <div className='mt-3 text-lg font-semibold text-gray-900'>${product.price}</div>
+      </div>
+    </div>
   );
 };
 

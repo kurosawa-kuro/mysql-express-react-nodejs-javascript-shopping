@@ -1,8 +1,5 @@
-// frontend\src\screens\HomeScreen.jsx
-
 // External Imports
 import { useState, useEffect } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 
 // Internal Imports
@@ -54,20 +51,20 @@ const HomeScreen = () => {
       {!keyword ? (
         <ProductCarousel />
       ) : (
-        <Link to='/' className='btn btn-light mb-4'>
+        <Link to='/' className='inline-block bg-white text-gray-700 py-2 px-4 rounded hover:bg-gray-200 mb-4'>
           Go Back
         </Link>
       )}
       <>
         <Meta />
-        <h1>Latest Products</h1>
-        <Row>
+        <h1 className='text-2xl font-semibold text-gray-700'>Latest Products</h1>
+        <div className='flex flex-wrap -m-4'>
           {productsData && productsData.products.map((product) => (
-            <Col key={product.id} sm={12} md={6} lg={4} xl={3}>
+            <div key={product.id} className='w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4'>
               <Product product={product} />
-            </Col>
+            </div>
           ))}
-        </Row>
+        </div>
         {productsData &&
           <Paginate
             pages={productsData.pages}
