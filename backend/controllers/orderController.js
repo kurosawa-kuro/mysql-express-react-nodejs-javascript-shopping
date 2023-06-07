@@ -44,8 +44,9 @@ const addOrderItems = asyncHandler(async (req, res) => {
 });
 
 const getMyOrders = asyncHandler(async (req, res) => {
+  const userId = Number(req.user.id);
   const orders = await db.order.findMany({
-    where: { userId: req.user.id },
+    where: { userId },
     include: {
       orderProducts: { include: { product: true } }
     }
