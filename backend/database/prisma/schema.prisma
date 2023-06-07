@@ -32,7 +32,7 @@ model Product {
   brand        String
   category     String
   description  String
-  rating       Int            @default(0)
+  rating       Float          @default(0)
   numReviews   Int            @default(0)
   price        Float          @default(0.00)
   countInStock Int            @default(0)

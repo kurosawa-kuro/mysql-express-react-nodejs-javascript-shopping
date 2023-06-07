@@ -21,7 +21,7 @@ CREATE TABLE `Product` (
     `brand` VARCHAR(191) NOT NULL,
     `category` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NOT NULL,
-    `rating` INTEGER NOT NULL DEFAULT 0,
+    `rating` DOUBLE NOT NULL DEFAULT 0,
     `numReviews` INTEGER NOT NULL DEFAULT 0,
     `price` DOUBLE NOT NULL DEFAULT 0.00,
     `countInStock` INTEGER NOT NULL DEFAULT 0,

@@ -23,7 +23,7 @@ async function createUsers() {
             name: 'Admin',
             email: 'admin@email.com',
             password: '123456',
-            isAdmin: 1,
+            isAdmin: true,
         },
         {
             name: 'john',
@@ -40,11 +40,11 @@ async function createUsers() {
     ];
 
     for (const user of users) {
-        const { name, email, password } = user;
+        const { name, email, password, isAdmin } = user;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await db.user.create({
-            data: { name, password: hashedPassword, email, isAdmin: false },
+            data: { name, password: hashedPassword, email, isAdmin },
         });
     }
 
