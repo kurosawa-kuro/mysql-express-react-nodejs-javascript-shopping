@@ -10,13 +10,14 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await db.user.findUnique({ where: { email } });
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    generateToken(res, user.id);
+    const { id, name, isAdmin } = user;
+    generateToken(res, id);
 
     res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+      id,
+      name,
+      email,
+      isAdmin,
     });
   } else {
     res.status(401);
@@ -43,13 +44,14 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    generateToken(res, user.id);
+    const { id, isAdmin } = user;
+    generateToken(res, id);
 
     res.status(201).json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+      id,
+      name,
+      email,
+      isAdmin,
     });
   } else {
     res.status(400);
@@ -66,14 +68,16 @@ const logoutUser = (req, res) => {
 };
 
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await db.user.findUnique({ where: { id: req.user.id } });
+  const id = Number(req.user.id);
+  const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
+    const { name, email, isAdmin } = user;
     res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+      id,
+      name,
+      email,
+      isAdmin,
     });
   } else {
     res.status(404);
@@ -82,11 +86,12 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await db.user.findUnique({ where: { id: req.user.id } });
+  const id = Number(req.user.id);
+  const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
     const updatedUser = await db.user.update({
-      where: { id: req.user.id },
+      where: { id },
       data: {
         name: req.body.name || user.name,
         email: req.body.email || user.email,
@@ -94,11 +99,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       },
     });
 
+    const { name, email, isAdmin } = updatedUser;
     res.json({
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
+      id,
+      name,
+      email,
+      isAdmin,
     });
   } else {
     res.status(404);
@@ -112,7 +118,8 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await db.user.findUnique({ where: { id: req.user.id } });
+  const id = Number(req.params.id);
+  const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
     if (user.isAdmin) {
@@ -120,7 +127,7 @@ const deleteUser = asyncHandler(async (req, res) => {
       throw new Error('Can not delete admin user');
     }
 
-    await db.user.delete({ where: { id: Number(req.params.id) } });
+    await db.user.delete({ where: { id: Number(id) } });
     res.json({ message: 'User removed' });
   } else {
     res.status(404);
@@ -141,13 +148,12 @@ const getUserById = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await db.user.findUnique({ where: { id: Number(req.params.id) } });
+  const id = Number(req.params.id);
+  const user = await db.user.findUnique({ where: { id } });
 
   if (user) {
     const updatedUser = await db.user.update({
-      where: {
-        id: Number(req.params.id),
-      },
+      where: { id: Number(id) },
       data: {
         name: req.body.name || user.name,
         email: req.body.email || user.email,
@@ -155,11 +161,12 @@ const updateUser = asyncHandler(async (req, res) => {
       },
     });
 
+    const { name, email, isAdmin } = updatedUser;
     res.json({
-      id: updatedUser.id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
+      id,
+      name,
+      email,
+      isAdmin,
     });
   } else {
     res.status(404);
