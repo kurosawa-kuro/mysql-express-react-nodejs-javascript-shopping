@@ -5,10 +5,10 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
 // Internal Imports
-import Loader from '../../components/Loader';
-import FormContainer from '../../components/FormContainer';
-import { registerUserApi } from '../../services/api';  // Import the api function
-import { useAuthStore } from '../../state/store';  // Zustand store hook
+import Loader from '../components/Loader';
+import FormContainer from '../components/FormContainer';
+import { registerUserApi } from '../services/api';  // Import the api function
+import { useAuthStore } from '../state/store';  // Zustand store hook
 
 const RegisterScreen = () => {
   // States
