@@ -26,7 +26,7 @@ const PaymentScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     savePaymentMethod(paymentMethod); // use the action from useCartStore
-    navigate('/placeorder');
+    navigate('/place-order');
   };
 
   return (

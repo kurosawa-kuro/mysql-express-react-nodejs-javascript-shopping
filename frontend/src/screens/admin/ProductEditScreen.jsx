@@ -62,7 +62,7 @@ const ProductEditScreen = () => {
         countInStock,
       });
       toast.success('Product updated');
-      navigate('/admin/productlist');
+      navigate('/admin/product-list');
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -82,7 +82,7 @@ const ProductEditScreen = () => {
 
   return (
     <>
-      <Link to='/admin/productlist' className='btn btn-light my-3'>
+      <Link to='/admin/product-list' className='btn btn-light my-3'>
         Go Back
       </Link>
       <FormContainer>

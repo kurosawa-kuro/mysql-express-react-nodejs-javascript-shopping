@@ -53,16 +53,16 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingScreen />} />
         <Route path='/payment' element={<PaymentScreen />} />
-        <Route path='/placeorder' element={<PlaceOrderScreen />} />
+        <Route path='/place-order' element={<PlaceOrderScreen />} />
         <Route path='/order/:id' element={<OrderScreen />} />
         <Route path='/profile' element={<ProfileScreen />} />
       </Route>
       {/* Admin users */}
       <Route path='' element={<AdminRoute />}>
-        <Route path='/admin/orderlist' element={<OrderListScreen />} />
-        <Route path='/admin/productlist' element={<ProductListScreen />} />
+        <Route path='/admin/order-list' element={<OrderListScreen />} />
+        <Route path='/admin/product-list' element={<ProductListScreen />} />
         <Route
-          path='/admin/productlist/:pageNumber'
+          path='/admin/product-list/:pageNumber'
           element={<ProductListScreen />}
         />
         <Route path='/admin/userlist' element={<UserListScreen />} />
