@@ -23,7 +23,7 @@ async function createUsers() {
             name: 'Admin',
             email: 'admin@email.com',
             password: '123456',
-            isAdmin: true,
+            isAdmin: 1,
         },
         {
             name: 'john',

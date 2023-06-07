@@ -40,6 +40,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
 // User must be an admin
 const admin = (req, res, next) => {
+  console.log('authMiddleware.js admin() req.user:', req.user);
   if (req.user && req.user.isAdmin) {
     next();
   } else {

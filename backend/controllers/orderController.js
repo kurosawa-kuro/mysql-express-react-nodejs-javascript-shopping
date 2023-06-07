@@ -21,8 +21,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('No order items');
   } else {
-    console.log('orderController.js addOrderItems() orderItems:', orderItems);
-
     const createdOrder = await db.order.create({
       data: {
         userId: req.user.id,
@@ -141,13 +139,35 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id/deliver
 // @access  Private/Admin
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await db.order.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+    include: {
+      user: true,
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
+    }
+  });
 
   if (order) {
     order.isDelivered = true;
     order.deliveredAt = Date.now();
 
-    const updatedOrder = await order.save();
+    const updatedOrder = await db.order.update({
+      where: {
+
+        id: parseInt(req.params.id),
+      },
+      data: {
+        isDelivered: true,
+
+        deliveredAt: new Date(), // It expects a JavaScript Date object
+      }
+    });
 
     res.json(updatedOrder);
   } else {
@@ -160,7 +180,18 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate('user', 'id name');
+  const orders = await db.order.findMany({
+    include: {
+      user: true,
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
+    }
+  });
+
+
   res.json(orders);
 });
 
