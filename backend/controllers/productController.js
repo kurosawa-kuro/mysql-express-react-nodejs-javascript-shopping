@@ -29,8 +29,9 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 const getProductById = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
   const product = await db.product.findUnique({
-    where: { id: Number(req.params.id) }
+    where: { id }
   });
 
   if (product) {
@@ -59,8 +60,9 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
   const updatedProduct = await db.product.update({
-    where: { id: Number(req.params.id) },
+    where: { id },
     data: req.body,
   });
 
@@ -73,8 +75,9 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
   const deletedProduct = await db.product.delete({
-    where: { id: Number(req.params.id) }
+    where: { id }
   });
 
   if (deletedProduct) {
@@ -86,10 +89,11 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 const createProductReview = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
   const { rating, comment } = req.body;
 
   const product = await db.product.findUnique({
-    where: { id: Number(req.params.id) },
+    where: { id },
   });
 
   if (product) {
@@ -118,7 +122,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       product.reviews.length;
 
     await db.product.update({
-      where: { id: Number(req.params.id) },
+      where: { id },
       data: { reviews: product.reviews, numReviews: product.numReviews, rating: product.rating },
     });
 

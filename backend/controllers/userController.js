@@ -127,7 +127,7 @@ const deleteUser = asyncHandler(async (req, res) => {
       throw new Error('Can not delete admin user');
     }
 
-    await db.user.delete({ where: { id: Number(id) } });
+    await db.user.delete({ where: { id } });
     res.json({ message: 'User removed' });
   } else {
     res.status(404);
@@ -153,7 +153,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
   if (user) {
     const updatedUser = await db.user.update({
-      where: { id: Number(id) },
+      where: { id },
       data: {
         name: req.body.name || user.name,
         email: req.body.email || user.email,
