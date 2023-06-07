@@ -57,8 +57,8 @@ const HomeScreen = () => {
       )}
       <>
         <Meta />
-        <h1 className='text-2xl font-semibold text-gray-700'>Latest Products</h1>
-        <div className='flex flex-wrap -m-4'>
+        <h1 className='text-2xl font-semibold text-gray-700 mt-4'>Latest Products</h1>
+        <div className='flex flex-wrap m-4'>
           {productsData && productsData.products.map((product) => (
             <div key={product.id} className='w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 p-4'>
               <Product product={product} />
