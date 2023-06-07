@@ -29,6 +29,7 @@ const OrderScreen = () => {
     try {
       setLoading(true);
       const data = await getOrderDetailsApi(orderId);
+      console.dir(data, { depth: 10 });
       setOrder(data);
     } catch (err) {
       setError(err.message);
@@ -134,19 +135,19 @@ const OrderScreen = () => {
                       <Row>
                         <Col md={1}>
                           <Image
-                            src={item.image}
-                            alt={item.name}
+                            src={item.product.image}
+                            alt={item.product.name}
                             fluid
                             rounded
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
-                            {item.name}
+                          <Link to={`/product/${item.product.id}`}>
+                            {item.product.name}
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x ${item.product.price} = ${item.qty * item.product.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>

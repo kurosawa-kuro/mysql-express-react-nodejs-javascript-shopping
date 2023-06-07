@@ -53,6 +53,7 @@ const PlaceOrderScreen = () => {
         taxPrice: taxPrice,
         totalPrice: totalPrice,
       });
+      console.log('debug res', res);
       clearCartItems(); // use the action from useCartStore
       setLoading(false);
       navigate(`/order/${res.id}`);

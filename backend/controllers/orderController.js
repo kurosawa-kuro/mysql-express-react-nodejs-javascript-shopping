@@ -44,9 +44,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       },
     });
 
-
-    throw new Error('Debugging error in orderController.js addOrderItems()');
-    res.status(201).json({});
+    res.status(201).json(createdOrder);
   }
 });
 
