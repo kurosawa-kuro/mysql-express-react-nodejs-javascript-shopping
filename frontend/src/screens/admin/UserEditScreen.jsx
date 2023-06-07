@@ -2,10 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-// import Message from '../../components/Message';
 import Loader from '../../components/Loader';
-import FormContainer from '../../components/FormContainer';
 import { toast } from 'react-toastify';
 import { getUserDetailsApi, updateUserApi } from '../../services/api';  // Import the api functions
 
@@ -52,52 +49,73 @@ const UserEditScreen = () => {
 
   return (
     <>
-      <Link to='/admin/user-list' className='btn btn-light my-3'>
+      <Link to='/admin/user-list' className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center my-3'>
         Go Back
       </Link>
-      <FormContainer>
-        <h1>Edit User</h1>
+      <div className='w-full max-w-xs mx-auto'>
+        <h1 className='text-2xl font-bold mb-3'>Edit User</h1>
         {isLoading ? (
           <Loader />
         ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group className='my-2' controlId='name'>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type='name'
+          <form onSubmit={submitHandler} className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+            <div className='mb-4'>
+              <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='name'>
+                Name
+              </label>
+              <input
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='name'
+                type='text'
                 placeholder='Enter name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              />
+            </div>
 
-            <Form.Group className='my-2' controlId='email'>
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
+            <div className='mb-4'>
+              <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='email'>
+                Email Address
+              </label>
+              <input
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='email'
                 type='email'
                 placeholder='Enter email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+              />
+            </div>
 
-            <Form.Group className='my-2' controlId='isadmin'>
-              <Form.Check
+            <div className='mb-4'>
+              <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='isadmin'>
+                Is Admin
+              </label>
+              <input
+                className='mr-2 leading-tight'
                 type='checkbox'
-                label='Is Admin'
+                id='isadmin'
                 checked={isAdmin}
                 onChange={(e) => setIsAdmin(e.target.checked)}
-              ></Form.Check>
-            </Form.Group>
+              />
+              <span className='text-sm'>
+                Check if the user is an administrator
+              </span>
+            </div>
 
-            <Button type='submit' variant='primary'>
-              Update
-            </Button>
-          </Form>
+            <div className='flex items-center justify-between'>
+              <button
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+                type='submit'
+              >
+                Update
+              </button>
+            </div>
+          </form>
         )}
-      </FormContainer>
+      </div>
     </>
   );
 };
 
 export default UserEditScreen;
+

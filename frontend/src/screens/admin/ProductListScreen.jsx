@@ -1,9 +1,5 @@
-// frontend\src\screens\admin\ProductListScreen.jsx
-
-import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button, Row, Col } from 'react-bootstrap';
 import { FaEdit, FaPlus, FaTrash } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
@@ -59,60 +55,69 @@ const ProductListScreen = () => {
 
   return (
     <>
-      <Row className='align-items-center'>
-        <Col>
-          <h1>Products</h1>
-        </Col>
-        <Col className='text-end'>
-          <Button className='my-3' onClick={createProductHandler}>
-            <FaPlus /> Create Product
-          </Button>
-        </Col>
-      </Row>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Products</h1>
+        <button onClick={createProductHandler} className='bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-500 transition duration-150'>
+          <FaPlus className='inline' /> Create Product
+        </button>
+      </div>
 
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message>{error}</Message>
       ) : (
         <>
-          <Table striped bordered hover responsive className='table-sm'>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NAME</th>
-                <th>PRICE</th>
-                <th>CATEGORY</th>
-                <th>BRAND</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {productsData && productsData.products.map((product) => (
-                <tr key={product.id}>
-                  <td>{product.id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                  <td>
-                    <LinkContainer to={`/admin/product/${product.id}/edit`}>
-                      <Button variant='light' className='btn-sm mx-2'>
-                        <FaEdit />
-                      </Button>
-                    </LinkContainer>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => deleteHandler(product.id)}
-                    >
-                      <FaTrash style={{ color: 'white' }} />
-                    </Button>
-                  </td>
+          <div className='overflow-x-auto'>
+            <table className='w-full whitespace-nowrap'>
+              <thead>
+                <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b bg-gray-50'>
+                  <th className='px-4 py-3'>ID</th>
+                  <th className='px-4 py-3'>NAME</th>
+                  <th className='px-4 py-3'>PRICE</th>
+                  <th className='px-4 py-3'>CATEGORY</th>
+                  <th className='px-4 py-3'>BRAND</th>
+                  <th className='px-4 py-3'></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody className='bg-white divide-y'>
+                {productsData && productsData.products.map((product) => (
+                  <tr key={product.id} className='text-gray-700'>
+                    <td className='px-4 py-3'>
+                      <Link to={`/admin/product/${product.id}/edit`} className='text-indigo-600 hover:text-indigo-900'>
+                        {product.id}
+                      </Link>
+                    </td>
+                    <td className='px-4 py-3'>
+                      {product.name}
+                    </td>
+                    <td className='px-4 py-3'>
+                      ${product.price}
+                    </td>
+                    <td className='px-4 py-3'>
+                      {product.category}
+                    </td>
+                    <td className='px-4 py-3'>
+                      {product.brand}
+                    </td>
+                    <td className='px-4 py-3'>
+                      <div className="flex items-center space-x-4 text-sm">
+                        <Link to={`/admin/product/${product.id}/edit`} className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'>
+                          <FaEdit />
+                        </Link>
+                        <button
+                          onClick={() => deleteHandler(product.id)}
+                          className='bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {productsData &&
             <Paginate pages={productsData.pages} page={productsData.page} isAdmin={true} />
           }
@@ -123,4 +128,3 @@ const ProductListScreen = () => {
 };
 
 export default ProductListScreen;
-

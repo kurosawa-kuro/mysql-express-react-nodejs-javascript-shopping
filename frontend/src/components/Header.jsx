@@ -11,13 +11,17 @@ const Header = () => {
   const { userInfo, logout } = useAuthStore();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [adminIsOpen, setAdminIsOpen] = useState(false); // Admin dropdown state
   const dropdownRef = useRef(null);
+  const adminDropdownRef = useRef(null); // Admin dropdown ref
 
   useEffect(() => {
     const closeDropdown = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsOpen(false);
+      }
+      if (adminDropdownRef.current && !adminDropdownRef.current.contains(e.target)) {
+        setAdminIsOpen(false);
       }
     };
 
@@ -39,7 +43,7 @@ const Header = () => {
     <header className='bg-blue-500 text-white py-3'>
       <div className='container mx-auto px-4 flex items-center justify-between'>
         <Link to='/' className='flex items-center space-x-2'>
-          {/* <img src={logo} alt='ProShop' className='w-10 h-10' /> */}
+          <img src={logo} alt='ProShop' className='w-10 h-10' />
           <span className='font-semibold text-xl'>Shop</span>
         </Link>
         <div className='flex items-center space-x-8'>
@@ -89,6 +93,38 @@ const Header = () => {
               <FaUser className='w-5 h-5' />
               <span>Sign In</span>
             </Link>
+          )}
+          {/* Admin Links */}
+          {userInfo && userInfo.isAdmin && (
+            <div className='relative inline-block text-left' ref={adminDropdownRef}>
+              <button
+                type='button'
+                onClick={() => setAdminIsOpen(!adminIsOpen)}
+                className='flex items-center space-x-2 text-gray-800'
+              >
+                <span>Admin Function</span>
+                {adminIsOpen ? (
+                  <FaChevronUp className='w-5 h-5' />
+                ) : (
+                  <FaChevronDown className='w-5 h-5' />
+                )}
+              </button>
+              {adminIsOpen && (
+                <div className='origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5'>
+                  <div className='py-1' role='menu' aria-orientation='vertical' aria-labelledby='options-menu'>
+                    <Link to='/admin/product-list' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' role='menuitem'>
+                      Products
+                    </Link>
+                    <Link to='/admin/order-list' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' role='menuitem'>
+                      Orders
+                    </Link>
+                    <Link to='/admin/user-list' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100' role='menuitem'>
+                      Users
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

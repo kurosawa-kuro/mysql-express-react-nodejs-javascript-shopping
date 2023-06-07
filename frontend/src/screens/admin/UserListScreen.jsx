@@ -1,19 +1,15 @@
-// frontend\src\screens\admin\UserListScreen.jsx
-
 import React, { useEffect, useState } from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
-// import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { toast } from 'react-toastify';
-import { useAuthStore } from '../../state/store';  // Zustand store hook
-import { deleteUserApi, getUsersApi } from '../../services/api';  // Import the api functions
+import { useAuthStore } from '../../state/store';
+import { deleteUserApi, getUsersApi } from '../../services/api';
 
 const UserListScreen = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { userInfo } = useAuthStore();  // Zustand store hook
+  const { userInfo } = useAuthStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -45,63 +41,63 @@ const UserListScreen = () => {
 
   return (
     <>
-      <h1>Users</h1>
+      <h1 className='text-3xl font-bold mb-4'>Users</h1>
       {isLoading ? (
         <Loader />
       ) : (
-        <Table striped bordered hover responsive className='table-sm'>
-          <thead>
+        <table className='min-w-full divide-y divide-gray-200'>
+          <thead className='bg-gray-50'>
             <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>EMAIL</th>
-              <th>ADMIN</th>
-              <th></th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>ID</th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>NAME</th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>EMAIL</th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>ADMIN</th>
+              <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className='bg-white divide-y divide-gray-200'>
             {users.map((user) => (
               <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>
-                  <a href={`mailto:${user.email}`}>{user.email}</a>
+                <td className='px-6 py-4 whitespace-nowrap'>{user.id}</td>
+                <td className='px-6 py-4 whitespace-nowrap'>{user.name}</td>
+                <td className='px-6 py-4 whitespace-nowrap'>
+                  <a href={`mailto:${user.email}`} className='text-indigo-600 hover:text-indigo-900'>{user.email}</a>
                 </td>
-                <td>
+                <td className='px-6 py-4 whitespace-nowrap'>
                   {user.isAdmin ? (
-                    <FaCheck style={{ color: 'green' }} />
+                    <FaCheck className='text-green-500' />
                   ) : (
-                    <FaTimes style={{ color: 'red' }} />
+                    <FaTimes className='text-red-500' />
                   )}
                 </td>
                 <td>
                   {userInfo.isAdmin && (
                     <>
-                      <LinkContainer
+                      <Link
                         to={`/admin/user/${user.id}/edit`}
-                        style={{ marginRight: '10px' }}
+                        className='bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center mr-2'
                       >
-                        <Button variant='light' className='btn-sm'>
-                          <FaEdit />
-                        </Button>
-                      </LinkContainer>
-                      <Button
-                        variant='danger'
-                        className='btn-sm'
+                        <FaEdit size={18} className="mr-1" />
+                        Edit
+                      </Link>
+                      <button
+                        className='inline-flex items-center text-white bg-red-600 hover:bg-red-700 rounded px-2 py-1'
                         onClick={() => deleteHandler(user.id)}
                       >
-                        <FaTrash style={{ color: 'white' }} />
-                      </Button>
+                        <FaTrash size={18} className="mr-1" />
+                        Delete
+                      </button>
                     </>
                   )}
                 </td>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       )}
     </>
   );
 };
 
 export default UserListScreen;
+

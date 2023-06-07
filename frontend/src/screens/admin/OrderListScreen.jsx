@@ -1,8 +1,5 @@
-// frontend\src\screens\admin\OrderListScreen.jsx
-
 import React, { useState, useEffect } from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -30,7 +27,7 @@ const OrderListScreen = () => {
 
   return (
     <>
-      <h1>Orders</h1>
+      <h1 className='text-2xl font-semibold mb-4'>Orders</h1>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -38,50 +35,50 @@ const OrderListScreen = () => {
           {error}
         </Message>
       ) : (
-        <Table striped bordered hover responsive className='table-sm'>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>USER</th>
-              <th>DATE</th>
-              <th>TOTAL</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.user && order.user.name}</td>
-                <td>{order.createdAt.substring(0, 10)}</td>
-                <td>${order.totalPrice}</td>
-                <td>
-                  {order.isPaid ? (
-                    order.paidAt.substring(0, 10)
-                  ) : (
-                    <FaTimes style={{ color: 'red' }} />
-                  )}
-                </td>
-                <td>
-                  {order.isDelivered ? (
-                    order.deliveredAt.substring(0, 10)
-                  ) : (
-                    <FaTimes style={{ color: 'red' }} />
-                  )}
-                </td>
-                <td>
-                  <LinkContainer to={`/order/${order.id}`}>
-                    <Button variant='light' className='btn-sm'>
-                      Details
-                    </Button>
-                  </LinkContainer>
-                </td>
+        <div className='overflow-x-auto'>
+          <table className='w-full divide-y divide-gray-200'>
+            <thead className='bg-gray-50'>
+              <tr>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>ID</th>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>USER</th>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>DATE</th>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>TOTAL</th>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>PAID</th>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>DELIVERED</th>
+                <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody className='bg-white divide-y divide-gray-200'>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td className='px-6 py-4 whitespace-nowrap'>{order.id}</td>
+                  <td className='px-6 py-4 whitespace-nowrap'>{order.user && order.user.name}</td>
+                  <td className='px-6 py-4 whitespace-nowrap'>{order.createdAt.substring(0, 10)}</td>
+                  <td className='px-6 py-4 whitespace-nowrap'>${order.totalPrice}</td>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    {order.isPaid ? (
+                      order.paidAt.substring(0, 10)
+                    ) : (
+                      <FaTimes className='text-red-500' />
+                    )}
+                  </td>
+                  <td className='px-6 py-4 whitespace-nowrap'>
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <FaTimes className='text-red-500' />
+                    )}
+                  </td>
+                  <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
+                    <Link to={`/order/${order.id}`} className='text-indigo-600 hover:text-indigo-900'>
+                      Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </>
   );

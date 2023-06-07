@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-import Message from '../../components/Message';
-import Loader from '../../components/Loader';
-import FormContainer from '../../components/FormContainer';
 import { toast } from 'react-toastify';
 import {
   getProductDetailsApi,
@@ -13,6 +9,7 @@ import {
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
+  const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
@@ -21,10 +18,8 @@ const ProductEditScreen = () => {
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
   const [description, setDescription] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -64,7 +59,7 @@ const ProductEditScreen = () => {
       toast.success('Product updated');
       navigate('/admin/product-list');
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.message);
     }
   };
 
@@ -76,7 +71,7 @@ const ProductEditScreen = () => {
       toast.success(res.message);
       setImage(res.image);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.message);
     }
   };
 
@@ -85,101 +80,56 @@ const ProductEditScreen = () => {
       <Link to='/admin/product-list' className='btn btn-light my-3'>
         Go Back
       </Link>
-      <FormContainer>
-        <h1>Edit Product</h1>
-        {loading && <Loader />}
+      <div className='w-full max-w-md mx-auto mt-4'>
+        <h1 className='text-2xl font-semibold mb-4 text-center'>Edit Product</h1>
+        {loading && <p>Loading...</p>}
         {loading ? (
-          <Loader />
+          <p>Loading...</p>
         ) : error ? (
-          <Message variant='danger'>{error}</Message>
+          <p className='text-red-500'>{error}</p>
         ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type='name'
-                placeholder='Enter name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+          <form className='mt-8 space-y-6' onSubmit={submitHandler}>
+            <input type='hidden' name='remember' value='true' />
+            <div className='rounded-md shadow-sm -space-y-px'>
+              <div>
+                <label htmlFor='name' className='sr-only'>Name</label>
+                <input id='name' name='name' type='name' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter name' value={name} onChange={(e) => setName(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor='price' className='sr-only'>Price</label>
+                <input id='price' name='price' type='number' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter price' value={price} onChange={(e) => setPrice(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor='image' className='sr-only'>Image</label>
+                <input id='image' name='image' type='text' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter image url' value={image} onChange={(e) => setImage(e.target.value)} />
+                <input id='image-file' name='image-file' type='file' className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' onChange={uploadFileHandler} />
+              </div>
+              <div>
+                <label htmlFor='brand' className='sr-only'>Brand</label>
+                <input id='brand' name='brand' type='text' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter brand' value={brand} onChange={(e) => setBrand(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor='countInStock' className='sr-only'>Count In Stock</label>
+                <input id='countInStock' name='countInStock' type='number' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter countInStock' value={countInStock} onChange={(e) => setCountInStock(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor='category' className='sr-only'>Category</label>
+                <input id='category' name='category' type='text' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter category' value={category} onChange={(e) => setCategory(e.target.value)} />
+              </div>
+              <div>
+                <label htmlFor='description' className='sr-only'>Description</label>
+                <input id='description' name='description' type='text' required className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm' placeholder='Enter description' value={description} onChange={(e) => setDescription(e.target.value)} />
+              </div>
+            </div>
 
-            <Form.Group controlId='price'>
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter price'
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='image'>
-              <Form.Label>Image</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter image url'
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-              <Form.Control
-                label='Choose File'
-                onChange={uploadFileHandler}
-                type='file'
-              ></Form.Control>
-              {loading && <Loader />}
-            </Form.Group>
-
-            <Form.Group controlId='brand'>
-              <Form.Label>Brand</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter brand'
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='countInStock'>
-              <Form.Label>Count In Stock</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter countInStock'
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='category'>
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter category'
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='description'>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter description'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Button
-              type='submit'
-              variant='primary'
-              style={{ marginTop: '1rem' }}
-            >
-              Update
-            </Button>
-          </Form>
+            <div>
+              <button type='submit' className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+                Update
+              </button>
+            </div>
+          </form>
         )}
-      </FormContainer>
+      </div>
     </>
   );
 };
