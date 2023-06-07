@@ -19,7 +19,6 @@ const OrderScreen = () => {
     try {
       setLoading(true);
       const data = await getOrderDetailsApi(orderId);
-      console.dir(data, { depth: 10 });
       setOrder(data);
     } catch (err) {
       setError(err.message);

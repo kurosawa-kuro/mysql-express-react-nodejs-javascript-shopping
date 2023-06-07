@@ -12,7 +12,7 @@ const ProfileScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [error, setError] = useState(null);
@@ -45,7 +45,7 @@ const ProfileScreen = () => {
     if (password !== confirmPassword) {
       toast.error('Passwords do not match');
     } else {
-      setIsLoading(true);
+      setLoading(true);
       try {
         const res = await updateUserProfileApi({
           id: userInfo.id,
@@ -58,7 +58,7 @@ const ProfileScreen = () => {
       } catch (err) {
         toast.error(err.message);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     }
   };
@@ -132,7 +132,7 @@ const ProfileScreen = () => {
               >
                 Update
               </button>
-              {isLoading && <Loader />}
+              {loading && <Loader />}
             </div>
           </form>
         </div>

@@ -7,26 +7,26 @@ import { getTopProductsApi } from '../services/api';
 
 const ProductCarousel = () => {
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTopProducts = async () => {
-      setIsLoading(true);
+      setLoading(true);
       try {
         const data = await getTopProductsApi();
         setProducts(data);
-        setIsLoading(false);
+        setLoading(false);
       } catch (err) {
         setError(err);
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
     fetchTopProducts();
   }, []);
 
-  return isLoading ? null : error ? (
+  return loading ? null : error ? (
     <Message variant='danger'>{error?.data?.message || error.message}</Message>
   ) : (
     <Carousel className="h-[250px]" showThumbs={false} showStatus={false} infiniteLoop useKeyboardArrows autoPlay>

@@ -8,19 +8,19 @@ import { deleteUserApi, getUsersApi } from '../../services/api';
 
 const UserListScreen = () => {
   const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { userInfo } = useAuthStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
-      setIsLoading(true);
+      setLoading(true);
       try {
         const data = await getUsersApi();
         setUsers(data);
       } catch (err) {
         toast.error(err.message);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
@@ -42,7 +42,7 @@ const UserListScreen = () => {
   return (
     <>
       <h1 className='text-3xl font-bold mb-4'>Users</h1>
-      {isLoading ? (
+      {loading ? (
         <Loader />
       ) : (
         <table className='min-w-full divide-y divide-gray-200'>

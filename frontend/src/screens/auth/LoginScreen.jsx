@@ -9,7 +9,7 @@ import { useAuthStore } from '../../state/store';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -25,7 +25,7 @@ const LoginScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
     try {
       const res = await loginUserApi({ email, password });
       setCredentials({ ...res });
@@ -33,7 +33,7 @@ const LoginScreen = () => {
     } catch (err) {
       toast.error(err.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -61,10 +61,10 @@ const LoginScreen = () => {
             className="mt-1 block w-full shadow-sm sm:text-sm rounded-md h-10"
           />
         </div>
-        <button disabled={isLoading} type="submit" className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <button disabled={loading} type="submit" className="w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Sign In
         </button>
-        {isLoading && <Loader />}
+        {loading && <Loader />}
       </form>
       <div className="py-3">
         <div>

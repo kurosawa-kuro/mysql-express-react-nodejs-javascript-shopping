@@ -11,13 +11,13 @@ const UserEditScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
-      setIsLoading(true);
+      setLoading(true);
       try {
         const user = await getUserDetailsApi(userId);
         setName(user.name);
@@ -26,7 +26,7 @@ const UserEditScreen = () => {
       } catch (err) {
         toast.error(err.message);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
@@ -35,7 +35,7 @@ const UserEditScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
     try {
       await updateUserApi({ userId, name, email, isAdmin });
       toast.success('User updated successfully');
@@ -43,7 +43,7 @@ const UserEditScreen = () => {
     } catch (err) {
       toast.error(err.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -54,7 +54,7 @@ const UserEditScreen = () => {
       </Link>
       <div className='w-full max-w-xs mx-auto'>
         <h1 className='text-2xl font-bold mb-3'>Edit User</h1>
-        {isLoading ? (
+        {loading ? (
           <Loader />
         ) : (
           <form onSubmit={submitHandler} className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
