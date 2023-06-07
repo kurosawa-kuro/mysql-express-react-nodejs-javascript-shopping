@@ -16,7 +16,7 @@
     "prisma:migrate": "powershell Remove-Item -Recurse -Force ./backend/database/prisma/migrations/ && npx prisma migrate dev --name init --schema=./backend/database/prisma/schema.prisma",
     "prisma:seed": "node backend/database/prisma/seed.js"
   },
-  "author": "Brad Traversy",
+  "author": "Toshifumi Kurosawa",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^4.15.0",
