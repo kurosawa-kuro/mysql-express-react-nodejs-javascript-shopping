@@ -187,6 +187,8 @@ export const getOrderDetailsApi = async (id) => {
 
 export const payOrderApi = async ({ orderId, details }) => {
     try {
+        console.log('api.js payOrderApi() details:', details);
+        console.log('api.js payOrderApi() orderId:', orderId);
         const response = await apiClient.put(`${'/api/orders'}/${orderId}/pay`, details);
         return response.data;
     } catch (error) {

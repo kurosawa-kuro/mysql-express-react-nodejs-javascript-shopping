@@ -97,9 +97,9 @@ const OrderScreen = () => {
               </p>
               <p>
                 <strong>Address:</strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
-                {order.shippingAddress.postalCode},{' '}
-                {order.shippingAddress.country}
+                {order.address}, {order.city}{' '}
+                {order.postalCode},{' '}
+                {order.country}
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>
@@ -125,11 +125,11 @@ const OrderScreen = () => {
 
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {order.orderItems.length === 0 ? (
+              {order.orderProducts.length === 0 ? (
                 <Message>Order is empty</Message>
               ) : (
                 <ListGroup variant='flush'>
-                  {order.orderItems.map((item, index) => (
+                  {order.orderProducts.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
@@ -194,7 +194,7 @@ const OrderScreen = () => {
                       Please <Link to='/login'>sign in</Link> to pay
                     </Message>
                   ) : (
-                    <Button onClick={onApproveTest} className='btn-block' type='button' disabled={order.orderItems.length === 0}>
+                    <Button onClick={onApproveTest} className='btn-block' type='button' disabled={order.orderProducts.length === 0}>
                       Test Pay
                     </Button>
                   )}

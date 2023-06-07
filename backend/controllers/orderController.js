@@ -57,7 +57,6 @@ const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await db.order.findMany({
     where: {
       userId: req.user.id,
-
     },
     include: {
       orderProducts: {
@@ -75,11 +74,21 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    'user',
-    'name email'
-  );
+  const order = await db.order.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+    include: {
+      user: true,
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
+    }
+  });
 
+  // console.dir(order, { depth: 10 });
   if (order) {
     res.json(order);
   } else {
@@ -92,20 +101,37 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id/pay
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await db.order.findUnique({
+    where: {
+      id: parseInt(req.params.id),
+    },
+    include: {
+      user: true,
+      orderProducts: {
+        include: {
+          product: true
+        }
+      }
+    }
+  });
+
 
   if (order) {
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.paymentResult = {
-      id: req.body.id,
-      status: req.body.status,
-      update_time: req.body.update_time,
-      email_address: req.body.payer.email_address,
-    };
+    const updatedOrder = await db.order.update({
+      where: {
+        id: parseInt(req.params.id),
+      },
+      data: {
+        isPaid: true,
+        paidAt: new Date(), // It expects a JavaScript Date object
+        paymentResultId: req.body.id,
+        paymentResultStatus: req.body.status,
+        paymentResultUpdateTime: req.body.update_time,
+        paymentResultEmail: req.body.payer.email_address,
+      }
+    });
 
-    const updatedOrder = await order.save();
-
+    console.dir(updatedOrder, { depth: 10 });
     res.json(updatedOrder);
   } else {
     res.status(404);
