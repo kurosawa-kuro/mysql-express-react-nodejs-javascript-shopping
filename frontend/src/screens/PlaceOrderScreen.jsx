@@ -104,7 +104,7 @@ const PlaceOrderScreen = () => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product}`}>
+                          <Link to={`/product/${item.id}`}>
                             {item.name}
                           </Link>
                         </Col>
