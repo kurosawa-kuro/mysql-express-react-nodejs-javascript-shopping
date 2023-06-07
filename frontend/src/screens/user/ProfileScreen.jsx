@@ -4,10 +4,10 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 
 import { toast } from 'react-toastify';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { updateUserProfileApi, getMyOrdersApi } from '../services/api';  // Import the api functions
-import { useAuthStore } from '../state/store';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import { updateUserProfileApi, getMyOrdersApi } from '../../services/api';  // Import the api functions
+import { useAuthStore } from '../../state/store';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('');
