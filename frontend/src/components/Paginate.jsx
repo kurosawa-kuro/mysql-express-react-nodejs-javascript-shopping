@@ -1,27 +1,33 @@
-// frontend\src\components\Paginate.jsx
-
-import { Pagination } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
   return (
     pages > 1 && (
-      <Pagination>
-        {[...Array(pages).keys()].map((x) => (
-          <LinkContainer
-            key={x + 1}
-            to={
-              !isAdmin
-                ? keyword
-                  ? `/search/${keyword}/page/${x + 1}`
-                  : `/page/${x + 1}`
-                : `/admin/product-list/${x + 1}`
-            }
-          >
-            <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
-          </LinkContainer>
-        ))}
-      </Pagination>
+      <nav className="flex justify-center my-4">
+        <ul className="pagination flex">
+          {[...Array(pages).keys()].map((x) => (
+            <li
+              key={x + 1}
+              className={`${x + 1 === page ? 'bg-blue-500' : 'bg-gray-200'
+                }`}
+            >
+              <Link
+                to={
+                  !isAdmin
+                    ? keyword
+                      ? `/search/${keyword}/page/${x + 1}`
+                      : `/page/${x + 1}`
+                    : `/admin/product-list/${x + 1}`
+                }
+                className={`block py-2 px-4 text-center text-white ${x + 1 === page ? 'bg-blue-500' : 'bg-gray-200'
+                  }`}
+              >
+                {x + 1}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     )
   );
 };

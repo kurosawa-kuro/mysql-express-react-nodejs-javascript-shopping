@@ -1,19 +1,8 @@
-// frontend\src\components\Loader.jsx
-
-import { Spinner } from 'react-bootstrap';
-
 const Loader = () => {
   return (
-    <Spinner
-      animation='border'
-      role='status'
-      style={{
-        width: '100px',
-        height: '100px',
-        margin: 'auto',
-        display: 'block',
-      }}
-    ></Spinner>
+    <div className="flex justify-center items-center h-full">
+      <div className="border-t-4 border-blue-500 rounded-full animate-spin w-12 h-12"></div>
+    </div>
   );
 };
 
