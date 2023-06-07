@@ -43,7 +43,7 @@ const Header = () => {
     <header className='bg-blue-500 text-white py-3'>
       <div className='container mx-auto px-4 flex items-center justify-between'>
         <Link to='/' className='flex items-center space-x-2'>
-          {/* <img src={logo} alt='ProShop' className='w-10 h-10' /> */}
+          {/* <img src={logo} alt='Shop' className='w-10 h-10' /> */}
           <span className='font-semibold text-xl'>Shop</span>
         </Link>
         <div className='flex items-center space-x-8'>
