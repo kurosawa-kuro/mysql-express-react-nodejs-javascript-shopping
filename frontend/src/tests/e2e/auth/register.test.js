@@ -22,8 +22,8 @@ test.describe('React App Test', () => {
     });
 
     test('should display the home page', async () => {
-        const expectedName = 'john4';
-        const email = 'john4@example.com';
+        const expectedName = 'john8';
+        const email = 'john8@example.com';
         const password = '123456';
 
         await page.goto('http://localhost:3000/register');
@@ -35,7 +35,10 @@ test.describe('React App Test', () => {
         await page.getByRole('button', { name: 'Register' }).click();
 
         await page.waitForSelector('span[data-testid="user-info-name"]');
-        await page.screenshot({ path: 'screenshot.png' });
+        const timestamp = new Date().getTime();
+        const screenshotPath = `./src/tests/screenshot/screenshot_${timestamp}.png`;
+
+        await page.screenshot({ path: screenshotPath });
         const nameElement = await page.$('span[data-testid="user-info-name"]');
         const actualName = await nameElement.textContent();
 

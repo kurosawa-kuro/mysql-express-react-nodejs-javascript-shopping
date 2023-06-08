@@ -27,3 +27,4 @@ frontend/build
 uploads/*png
 uploads/*jpg
 frontend/screenshot.png
+frontend/src/tests/screenshot/*
