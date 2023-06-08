@@ -21,10 +21,12 @@ describe('HomeScreen', () => {
                 </BrowserRouter>
             </HelmetProvider>
         );
+
         await waitFor(() => {
             products.forEach(product => {
                 expect(screen.getByText(product.name)).toBeInTheDocument();
             });
         });
+        // screen.debug();
     });
 });
