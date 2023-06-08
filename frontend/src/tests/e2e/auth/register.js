@@ -22,17 +22,16 @@ test.describe('React App Test', () => {
     });
 
     test('should display the home page', async () => {
-        const expectedName = 'john8';
-        const email = 'john8@example.com';
+        const expectedName = 'john10';
+        const email = 'john10@example.com';
         const password = '123456';
 
         await page.goto('http://localhost:3000/register');
-        await page.getByPlaceholder('Enter name').click();
-        await page.getByPlaceholder('Enter name').fill(expectedName);
-        await page.getByPlaceholder('Enter email').fill(email);
-        await page.getByPlaceholder('Enter password').fill(password);
-        await page.getByPlaceholder('Confirm password').fill(password);
-        await page.getByRole('button', { name: 'Register' }).click();
+        await page.fill('input[placeholder="Enter name"]', expectedName);
+        await page.fill('input[placeholder="Enter email"]', email);
+        await page.fill('input[placeholder="Enter password"]', password);
+        await page.fill('input[placeholder="Confirm password"]', password);
+        await page.click('button:has-text("Register")');
 
         await page.waitForSelector('span[data-testid="user-info-name"]');
         const timestamp = new Date().getTime();
