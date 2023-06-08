@@ -66,7 +66,7 @@ const Header = () => {
                   className='flex items-center space-x-2'
                 >
                   <FaUser className='w-5 h-5' />
-                  <span>{userInfo.name}</span>
+                  <span data-testid="user-info-name">{userInfo.name}</span>
                   {isOpen ? (
                     <FaChevronUp className='w-5 h-5' />
                   ) : (

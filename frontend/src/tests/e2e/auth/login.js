@@ -22,15 +22,20 @@ test.describe('React App Test', () => {
     });
 
     test('should display the home page', async () => {
-        await page.goto('http://localhost:3000/login');
-        await page.waitForSelector('h1');
-        await page.click('text="Sign In"');
-        await page.fill('input[type="email"]', 'john@example.com');
-        await page.fill('input[type="password"]', '123456');
-        await page.click('button[type="submit"]');
-        await page.waitForSelector('h1');
-        const title = await page.$eval('h1', (element) => element.textContent);
+        const expectedName = 'john';
+        const email = 'john@email.com';
+        const password = '123456';
 
-        expect(title).toBe('Latest Products');
+        await page.goto('http://localhost:3000/login');
+        await page.fill('input[type="email"]', email);
+        await page.fill('input[type="password"]', password);
+        await page.getByTestId('login').click();
+
+        await page.waitForSelector('span[data-testid="user-info-name"]');
+        await page.screenshot({ path: 'screenshot.png' });
+        const nameElement = await page.$('span[data-testid="user-info-name"]');
+        const actualName = await nameElement.textContent();
+
+        expect(actualName).toBe(expectedName);
     });
 });
