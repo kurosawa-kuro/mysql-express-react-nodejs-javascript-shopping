@@ -1,3 +1,5 @@
+// frontend\src\tests\e2e\auth\login.test.js
+
 const { chromium } = require('playwright');
 const { test, expect } = require('@playwright/test');
 

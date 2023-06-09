@@ -3,7 +3,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
@@ -13,23 +12,23 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import PrivateRoute from './components/PrivateRoute';
-import AdminRoute from './components/AdminRoute';
-import HomeScreen from './screens/HomeScreen';
-import ProductScreen from './screens/ProductScreen';
-import CartScreen from './screens/CartScreen';
-import ShippingScreen from './screens/ShippingScreen';
-import PaymentScreen from './screens/PaymentScreen';
-import PlaceOrderScreen from './screens/PlaceOrderScreen';
-import OrderScreen from './screens/OrderScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import PrivateRoute from './components/routing/PrivateRoute';
+import AdminRoute from './components/routing/AdminRoute';
+import HomeScreen from './screens/product/HomeScreen';
+import ProductScreen from './screens/product/ProductScreen';
+import CartScreen from './screens/order/CartScreen';
+import ShippingScreen from './screens/order/ShippingScreen';
+import PaymentScreen from './screens/order/PaymentScreen';
+import PlaceOrderScreen from './screens/order/PlaceOrderScreen';
+import OrderScreen from './screens/order/OrderScreen';
+import ProfileScreen from './screens/user/ProfileScreen';
 import LoginScreen from './screens/auth/LoginScreen';
 import RegisterScreen from './screens/auth/RegisterScreen';
-import OrderListScreen from './screens/admin/OrderListScreen';
-import ProductListScreen from './screens/admin/ProductListScreen';
-import ProductEditScreen from './screens/admin/ProductEditScreen';
-import UserListScreen from './screens/admin/UserListScreen';
-import UserEditScreen from './screens/admin/UserEditScreen';
+import OrderListScreen from './screens/admin/order/OrderListScreen';
+import ProductListScreen from './screens/admin/product/ProductListScreen';
+import ProductEditScreen from './screens/admin/product/ProductEditScreen';
+import UserListScreen from './screens/admin/user/UserListScreen';
+import UserEditScreen from './screens/admin/user/UserEditScreen';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 const router = createBrowserRouter(

@@ -1,7 +1,9 @@
+// frontend\src\tests\App.test.js
+
 import { render, screen, waitFor } from "@testing-library/react";
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/product/HomeScreen';
 import { getProductsApi } from '../services/api';
 
 // Mock API

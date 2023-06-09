@@ -1,8 +1,10 @@
+// frontend\src\screens\auth\RegisterScreen.jsx
+
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Loader from '../../components/Loader';
-import FormContainer from '../../components/FormContainer';
+import Loader from '../../components/common/Loader';
+import FormContainer from '../../components/forms/FormContainer';
 import { registerUserApi } from '../../services/api';
 import { useAuthStore } from '../../state/store';
 
@@ -100,7 +102,7 @@ const RegisterScreen = () => {
           </Link>
         </div>
       </div>
-    </FormContainer>
+    </FormContainer >
   );
 };
 
