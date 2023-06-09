@@ -56,3 +56,24 @@
 
 ![shopping_er](https://github.com/kurosawa-kuro/mysql-express-react-nodejs-javascript-shopping/assets/15902862/e1fbbe66-d42d-470b-9862-6b42d8eab6aa)
 
+```
+C:\Users\kuros\local_dev\full-stack-basic\shopping\sample\mysql-express-react-nodejs-javascript-shopping
+npm run dev
+```
+
+```
+C:\Users\kuros\local_dev\full-stack-basic\shopping\sample\mysql-express-react-nodejs-javascript-shopping
+npx playwright test frontend/src/tests/e2e/auth/login.test.js
+npx playwright test --debug frontend/src/tests/e2e/auth/login.test.js
+```
+
+```
+C:\Users\kuros\local_dev\full-stack-basic\shopping\sample\mysql-express-react-nodejs-javascript-shopping
+cd frontend
+npm test ./src/tests/App.test.js
+```
+
+```
+C:\Users\kuros\local_dev\full-stack-basic\shopping\sample\mysql-express-react-nodejs-javascript-shopping
+npm test ./backend/test/app.test.js
+```
